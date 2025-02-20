@@ -1,16 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
-import { CommunicationService } from './communication.service';
+import { Controller } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
-import { CreateUserEvent } from '../../api/src/events';
+import { CreateUserEvent } from '../../users/src/events';
+import { CommunicationService } from './communication.service';
 
 @Controller()
 export class CommunicationController {
   constructor(private readonly communicationService: CommunicationService) {}
-
-  @Get()
-  getHello(): string {
-    return this.communicationService.getHello();
-  }
 
   @EventPattern(CreateUserEvent.type)
   handleUserCreated(data: CreateUserEvent) {

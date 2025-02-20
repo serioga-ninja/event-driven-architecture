@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ApiController } from './api.controller';
-import { ApiService } from './api.service';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { COMMUNICATION_SERVICE } from '../../../src/constants';
 
@@ -16,7 +16,7 @@ import { COMMUNICATION_SERVICE } from '../../../src/constants';
       },
     ]),
   ],
-  controllers: [ApiController],
-  providers: [ApiService],
+  controllers: [UsersController],
+  providers: [UsersService],
 })
-export class ApiModule {}
+export class UsersModule {}

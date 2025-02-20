@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { CreateUserEvent } from '../../api/src/events';
+import type { CreateUserEvent } from '../../users/src/events';
 
 @Injectable()
 export class CommunicationService {
