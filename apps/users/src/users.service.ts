@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { CreateUserRequest } from './dtos';
-import type { ClientProxy } from '@nestjs/microservices';
 import { USERS_EVENTS } from './constants';
-import { CreateUserEvent } from './events';
+import type { CreateUserRequest } from './dtos';
+import type UsersRepository from './users.repository';
 
 @Injectable()
 export class UsersService {
@@ -10,14 +9,10 @@ export class UsersService {
 
   constructor(
     @Inject(USERS_EVENTS)
-    private readonly communicationClient: ClientProxy,
+    private readonly usersRepository: UsersRepository,
   ) {}
 
   createUser(createUserRequest: CreateUserRequest) {
-    this.users.push(createUserRequest);
-    this.communicationClient.emit(
-      CreateUserEvent.type,
-      new CreateUserEvent(createUserRequest.email),
-    );
+    this.usersRepository.createUser(createUserRequest);
   }
 }

@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+services:
+  # users:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/users/Dockerfile
+  #     target: development
+  #   command: npm run start:dev users
+  #   env_file:
+  #     - ./apps/users/.env
+  #   depends_on:
+  #     - mongo
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - 3000:3000
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: main
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - mongodbdata:/data/db
+      - ./.docker/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - 27017:27017
+
+volumes:
+  mongodbdata:
+    driver: local
