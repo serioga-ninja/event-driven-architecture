@@ -2,12 +2,8 @@ import { Injectable } from '@nestjs/common';
 import type { CreateUserEvent } from '../../users/src/events';
 
 @Injectable()
-export class CommunicationService {
-  getHello(): string {
-    return 'Hello World!';
-  }
-
+export class EmailsService {
   handleUserCreated(data: CreateUserEvent) {
-    console.log('handleUserCreated - CIMMUNICATIONS', data);
+    console.log('handleUserCreated - EmailsService', data);
   }
 }

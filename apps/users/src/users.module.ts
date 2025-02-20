@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { COMMUNICATION_SERVICE } from '../../../src/constants';
+import { USERS_EVENTS } from './constants';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: COMMUNICATION_SERVICE,
+        name: USERS_EVENTS,
         transport: Transport.TCP,
         options: {
           port: 3001,

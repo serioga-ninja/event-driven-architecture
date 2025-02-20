@@ -10,13 +10,22 @@
   "monorepo": true,
   "root": "apps/users",
   "projects": {
-    "communication": {
-      "type": "application",
-      "root": "apps/communication",
-      "entryFile": "main",
-      "sourceRoot": "apps/communication/src",
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/communication/tsconfig.app.json"
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "emails": {
+      "type": "application",
+      "root": "apps/emails",
+      "entryFile": "main",
+      "sourceRoot": "apps/emails/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/emails/tsconfig.app.json"
       }
     },
     "users": {
