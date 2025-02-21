@@ -1,1 +1,1 @@
-export const USERS_EVENTS = 'USERS_EVENTS';
+export const EMAILS_SERVICE = 'EMAILS';

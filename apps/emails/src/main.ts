@@ -1,19 +1,13 @@
+import { RmqService } from '@app/common';
 import { NestFactory } from '@nestjs/core';
-import { type MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { EmailsModule } from './emails.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    EmailsModule,
-    {
-      transport: Transport.TCP,
-      options: {
-        host: 'localhost',
-        port: 3001,
-      },
-    },
-  );
+  const app = await NestFactory.create(EmailsModule);
+  const rmqService = app.get(RmqService);
 
-  await app.listen();
+  app.connectMicroservice(rmqService.getOptions('RMQ_EMAIL_QUEUE'));
+
+  await app.startAllMicroservices();
 }
 bootstrap();

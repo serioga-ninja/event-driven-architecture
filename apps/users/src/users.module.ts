@@ -1,14 +1,13 @@
-import { DatabaseModule } from '@app/common';
+import { DatabaseModule, RmqModule } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
-import { USERS_EVENTS } from './constants';
+import { EMAILS_SERVICE } from './constants';
+import { Users, UsersSchema } from './schemas';
 import { UsersController } from './users.controller';
 import UsersRepository from './users.repository';
 import { UsersService } from './users.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Users, UsersSchema } from './schemas';
 
 @Module({
   imports: [
@@ -22,15 +21,7 @@ import { Users, UsersSchema } from './schemas';
     }),
     DatabaseModule,
     MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
-    ClientsModule.register([
-      {
-        name: USERS_EVENTS,
-        transport: Transport.TCP,
-        options: {
-          port: 3001,
-        },
-      },
-    ]),
+    RmqModule.register({ name: EMAILS_SERVICE, queue: 'RMQ_EMAIL_QUEUE' }),
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],
