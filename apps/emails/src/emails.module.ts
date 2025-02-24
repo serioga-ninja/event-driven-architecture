@@ -10,8 +10,7 @@ import * as Joi from 'joi';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
-        RMQ_URL: Joi.string().required(),
-        RMQ_EMAIL_QUEUE: Joi.string().required(),
+        RABBIT_MQ_URI: Joi.string().required(),
       }),
       envFilePath: './apps/emails/.env',
     }),

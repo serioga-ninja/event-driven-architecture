@@ -14,8 +14,8 @@ export default class RmqService {
     return {
       transport: Transport.RMQ,
       options: {
-        urls: [this.configService.get<string>('RMQ_URL') as string],
-        queue: this.configService.get<string>(queue) as string,
+        urls: [this.configService.get<string>('RABBIT_MQ_URI') as string],
+        queue,
         noAck,
         persistent: true,
       },

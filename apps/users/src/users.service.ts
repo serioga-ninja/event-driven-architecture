@@ -1,14 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
-import type { CreateUserRequest } from './dtos';
-import UsersRepository from './users.repository';
-import { EMAILS_SERVICE } from './constants';
-import type { ClientProxy } from '@nestjs/microservices';
+import { EMAILS_SERVICE } from '@app/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
+import { CreateUserRequest } from './dtos';
 import { CreateUserEvent } from './events';
+import { Users } from './schemas';
+import UsersRepository from './users.repository';
 
 @Injectable()
 export class UsersService {
-  private readonly users: any[] = [];
+  private readonly _logger = new Logger(UsersService.name);
 
   constructor(
     private readonly usersRepository: UsersRepository,
@@ -16,7 +22,10 @@ export class UsersService {
   ) {}
 
   async createUser(createUserRequest: CreateUserRequest) {
+    await this.validateCreateUserRequest(createUserRequest);
+
     const order = await this.usersRepository.create(createUserRequest);
+
     await lastValueFrom(
       this.emailsService.emit(
         CreateUserEvent.type,
@@ -25,5 +34,25 @@ export class UsersService {
     );
 
     return order;
+  }
+
+  getUserById(id: string) {
+    return this.usersRepository.findOneById(id);
+  }
+
+  private async validateCreateUserRequest(request: CreateUserRequest) {
+    let user: Users | null = null;
+
+    try {
+      user = await this.usersRepository.findOneBy({
+        email: request.email,
+      });
+    } catch (err) {
+      this._logger.error(err);
+    }
+
+    if (user) {
+      throw new UnprocessableEntityException('Email already exists.');
+    }
   }
 }
