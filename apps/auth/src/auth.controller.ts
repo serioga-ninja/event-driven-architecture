@@ -3,6 +3,10 @@ import { AuthService } from './auth.service';
 import type { RegisterUserDto } from './dtos';
 import { JwtAuthGuard, LocalAuthGuard } from './guards';
 import type { AuthRequest } from './types';
+import { MessagePattern } from '@nestjs/microservices';
+import { ValidateUserEvent } from '@app/common';
+import { CurrentUser } from './decorators';
+import type { Users } from '../../users/src/schemas';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +27,11 @@ export class AuthController {
   @Post('logout')
   handleLogOut() {
     return this.authService.logout();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @MessagePattern(ValidateUserEvent.type)
+  validateUser(@CurrentUser() user: Users) {
+    return user;
   }
 }

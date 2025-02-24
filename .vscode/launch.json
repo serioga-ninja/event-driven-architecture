@@ -7,9 +7,16 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Attach API",
+      "name": "Attach Users",
       "port": 9229,
-      "restart": true,
+      "restart": true
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach Auth",
+      "port": 9231,
+      "restart": true
     }
   ]
 }

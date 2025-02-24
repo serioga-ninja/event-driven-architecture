@@ -1,4 +1,5 @@
 import {
+  AuthModule,
   DatabaseModule,
   EMAILS_QUEUE,
   EMAILS_SERVICE,
@@ -29,6 +30,7 @@ import { UsersService } from './users.service';
       name: EMAILS_SERVICE,
       queue: EMAILS_QUEUE,
     }),
+    AuthModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],

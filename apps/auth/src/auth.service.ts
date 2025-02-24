@@ -8,7 +8,6 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
 import { EMAILS_SERVICE } from '../../../libs/common/src';
 import { CreateUserEvent } from '../../users/src/events';
 import type { Users } from '../../users/src/schemas';
@@ -58,7 +57,9 @@ export class AuthService {
       expires.getSeconds() + this._configService.get('JWT_EXPIRATION'),
     );
 
-    const token = this._jwtService.sign(tokenPayload);
+    const token = this._jwtService.sign(tokenPayload, {
+      secret: this._configService.get('JWT_SECRET'),
+    });
 
     return {
       token,
