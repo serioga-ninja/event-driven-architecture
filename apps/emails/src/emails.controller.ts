@@ -7,10 +7,14 @@ import {
 } from '@nestjs/microservices';
 import { CreateUserEvent } from '../../users/src/events';
 import { EmailsService } from './emails.service';
+import { RmqService } from '@app/common';
 
 @Controller()
 export class EmailsController {
-  constructor(private readonly emailsService: EmailsService) {}
+  constructor(
+    private readonly emailsService: EmailsService,
+    private readonly rmqService: RmqService,
+  ) {}
 
   @EventPattern(CreateUserEvent.type)
   handleUserCreated(
@@ -19,5 +23,6 @@ export class EmailsController {
   ) {
     console.log('EmailsController.handleUserCreated', data);
     this.emailsService.handleUserCreated(data);
+    this.rmqService.ack(context);
   }
 }
