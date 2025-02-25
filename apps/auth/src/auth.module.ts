@@ -1,19 +1,20 @@
-import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import {
   DatabaseModule,
   EMAILS_QUEUE,
   EMAILS_SERVICE,
   RmqModule,
 } from '@app/common';
-import { UsersModule } from '../../users/src/users.module';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as Joi from 'joi';
 import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Users, UsersSchema } from '../../users/src/mongo-schemas';
+import { UsersModule } from '../../users/src/users.module';
+import { AuthController } from './auth.controller';
+import { AuthRepository } from './repositories';
+import { authConfigSchema } from './schemas';
+import { AuthService, PasswordService } from './services';
 import { JwtStrategy, LocalStrategy } from './strategies';
-import PasswordService from './passwords.service';
-import type { AuthConfigs } from './types';
 
 @Module({
   imports: [
@@ -22,13 +23,7 @@ import type { AuthConfigs } from './types';
     RmqModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object<AuthConfigs>({
-        JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRATION: Joi.string().required(),
-        MONGODB_URI: Joi.string().required(),
-        RABBIT_MQ_URI: Joi.string().required(),
-        PORT: Joi.string().required(),
-      }),
+      validationSchema: authConfigSchema,
       envFilePath: './apps/auth/.env',
     }),
     JwtModule.registerAsync({
@@ -42,8 +37,15 @@ import type { AuthConfigs } from './types';
       name: EMAILS_SERVICE,
       queue: EMAILS_QUEUE,
     }),
+    MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, PasswordService],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    PasswordService,
+    AuthRepository,
+  ],
 })
 export class AuthModule {}

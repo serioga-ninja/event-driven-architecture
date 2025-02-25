@@ -1,3 +1,3 @@
-import CreateUserRequest from './CreateUserRequest';
+import CreateUserDto from './create-user.dto';
 
-export { CreateUserRequest };
+export { CreateUserDto };

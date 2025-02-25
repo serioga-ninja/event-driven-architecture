@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import type { Users } from '../../../users/src/schemas';
+import type { Users } from '../../../users/src/mongo-schemas';
 
 const getCurrentUserByContext = (
   context: ExecutionContext,

@@ -1,3 +1,3 @@
-import CreateUserEvent from './CreateUserEvent';
+import CreateUserEvent from './create-user.event';
 
 export { CreateUserEvent };

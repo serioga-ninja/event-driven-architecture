@@ -1,3 +1,4 @@
+import { EMAILS_SERVICE } from '@app/common';
 import {
   Inject,
   Injectable,
@@ -8,11 +9,10 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
-import { EMAILS_SERVICE } from '../../../libs/common/src';
-import { CreateUserEvent } from '../../users/src/events';
-import type { Users } from '../../users/src/schemas';
-import UsersRepository from '../../users/src/users.repository';
-import type { RegisterUserDto } from './dtos';
+import { CreateUserEvent } from '../../../users/src/events';
+import type { Users } from '../../../users/src/mongo-schemas';
+import UsersRepository from '../../../users/src/users.repository';
+import type { RegisterUserDto } from '../dtos';
 import PasswordService from './passwords.service';
 
 export type TokenPayload = {
@@ -20,7 +20,7 @@ export type TokenPayload = {
 };
 
 @Injectable()
-export class AuthService {
+export default class AuthService {
   private readonly _logger = new Logger(AuthService.name);
 
   constructor(

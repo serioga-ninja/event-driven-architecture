@@ -6,11 +6,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { Request } from 'express';
 import { catchError, Observable, tap } from 'rxjs';
+import type { Users } from '../../../../apps/users/src/mongo-schemas';
 import { AUTH_SERVICE } from '../rmq';
 import { ValidateUserEvent } from './events';
-import { Request } from 'express';
-import type { Users } from '../../../../apps/users/src/schemas';
 
 @Injectable()
 export default class JwtAuthGuard implements CanActivate {

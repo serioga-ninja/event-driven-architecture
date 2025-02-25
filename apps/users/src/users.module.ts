@@ -8,8 +8,8 @@ import {
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import * as Joi from 'joi';
-import { Users, UsersSchema } from './schemas';
+import { Users, UsersSchema } from './mongo-schemas';
+import { userConfigSchema } from './schemas';
 import { UsersController } from './users.controller';
 import UsersRepository from './users.repository';
 import { UsersService } from './users.service';
@@ -18,10 +18,7 @@ import { UsersService } from './users.service';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        MONGODB_URI: Joi.string().required(),
-        USERS_PORT: Joi.number().required(),
-      }),
+      validationSchema: userConfigSchema,
       envFilePath: './apps/users/.env',
     }),
     DatabaseModule,

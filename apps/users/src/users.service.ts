@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
-import { CreateUserRequest } from './dtos';
+import { CreateUserDto } from './dtos';
 import { CreateUserEvent } from './events';
-import { Users } from './schemas';
+import { Users } from './mongo-schemas';
 import UsersRepository from './users.repository';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class UsersService {
     @Inject(EMAILS_SERVICE) private readonly emailsService: ClientProxy,
   ) {}
 
-  async createUser(createUserRequest: CreateUserRequest) {
+  async createUser(createUserRequest: CreateUserDto) {
     await this.validateCreateUserRequest(createUserRequest);
 
     const order = await this.usersRepository.create(createUserRequest);
@@ -40,7 +40,7 @@ export class UsersService {
     return this.usersRepository.findOneById(id);
   }
 
-  private async validateCreateUserRequest(request: CreateUserRequest) {
+  private async validateCreateUserRequest(request: CreateUserDto) {
     let user: Users | null = null;
 
     try {

@@ -1,4 +1,4 @@
-import { AUTH_QUEUE, RmqService } from '@app/common';
+import { AllExceptionsFilter, AUTH_QUEUE, RmqService } from '@app/common';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -11,6 +11,7 @@ async function bootstrap() {
 
   app.connectMicroservice(rmqService.getOptions(AUTH_QUEUE, true));
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   const configService = app.get(ConfigService<AuthConfigs, true>);
   await app.startAllMicroservices();

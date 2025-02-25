@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import type {
   ClientSession,
   Connection,
@@ -5,14 +6,31 @@ import type {
   RootFilterQuery,
 } from 'mongoose';
 
+type FindOneOptions<T> = {
+  select?: (keyof T)[];
+};
+
 export default abstract class AbstractRepository<Entity> {
+  protected readonly logger: Logger;
+
   constructor(
     protected readonly model: Model<Entity>,
     protected readonly connection: Connection,
-  ) {}
+  ) {
+    this.logger = new Logger(this.constructor.name);
+  }
 
-  findOneBy(query: RootFilterQuery<Entity>) {
-    return this.model.findOne(query);
+  findOneBy(
+    query: RootFilterQuery<Entity>,
+    options: FindOneOptions<Entity> = {},
+  ) {
+    const qb = this.model.findOne(query);
+
+    if (options.select) {
+      qb.select(options.select as string[]);
+    }
+
+    return qb.exec();
   }
 
   findOneById(id: string) {

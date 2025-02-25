@@ -1,5 +1,5 @@
-import type { Users } from '../../../users/src/schemas';
 import { Request } from 'express';
+import type { Users } from '../../../users/src/mongo-schemas';
 
 export type AuthRequest = Request & { user: Users };
 export type AuthConfigs = {
