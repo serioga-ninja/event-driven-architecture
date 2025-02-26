@@ -1,4 +1,5 @@
-import { Request } from 'express';
+import type { CacheConfig } from '@app/common';
+import type { Request } from 'express';
 import type { Users } from '../../../users/src/mongo-schemas';
 
 export type AuthRequest = Request & { user: Users };
@@ -8,4 +9,4 @@ export type AuthConfigs = {
   JWT_EXPIRATION: number;
   MONGODB_URI: string;
   RABBIT_MQ_URI: string;
-};
+} & CacheConfig;

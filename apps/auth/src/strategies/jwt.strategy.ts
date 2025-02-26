@@ -1,15 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UsersService } from '../../../users/src/users.service';
+import AuthRepository from '../repositories/auth.repository';
 import { TokenPayload } from '../services/auth.service';
 
 @Injectable()
 export default class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     configService: ConfigService,
-    private readonly usersService: UsersService,
+    private readonly _authRepository: AuthRepository,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors<{
@@ -27,10 +27,6 @@ export default class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate({ userId }: TokenPayload) {
-    try {
-      return this.usersService.getUserById(userId);
-    } catch (err) {
-      throw new UnauthorizedException();
-    }
+    return this._authRepository.findOneById(userId);
   }
 }

@@ -11,8 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateUserEvent } from '../../../users/src/events';
 import type { Users } from '../../../users/src/mongo-schemas';
-import UsersRepository from '../../../users/src/users.repository';
 import type { RegisterUserDto } from '../dtos';
+import { AuthRepository } from '../repositories';
 import PasswordService from './passwords.service';
 
 export type TokenPayload = {
@@ -26,7 +26,7 @@ export default class AuthService {
   constructor(
     private readonly _configService: ConfigService,
     private readonly _jwtService: JwtService,
-    private readonly _usersRepository: UsersRepository,
+    private readonly _authRepository: AuthRepository,
     private readonly _passwordService: PasswordService,
     @Inject(EMAILS_SERVICE) private readonly _emailsService: ClientProxy,
   ) {}
@@ -37,7 +37,7 @@ export default class AuthService {
     createUserRequest.password = this._passwordService.generatePassword(
       createUserRequest.password,
     );
-    const user = await this._usersRepository.create(createUserRequest);
+    const user = await this._authRepository.create(createUserRequest);
 
     this._emailsService.emit(
       CreateUserEvent.type,
@@ -72,7 +72,7 @@ export default class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this._usersRepository.findOneBy({ email });
+    const user = await this._authRepository.findOneBy({ email });
     const passwordIsValid = this._passwordService.comparePasswords(
       password,
       user?.password || '',
@@ -89,7 +89,7 @@ export default class AuthService {
     let user: Users | null = null;
 
     try {
-      user = await this._usersRepository.findOneBy({
+      user = await this._authRepository.findOneBy({
         email: request.email,
       });
     } catch (err) {

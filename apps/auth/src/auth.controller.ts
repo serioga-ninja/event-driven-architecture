@@ -5,7 +5,7 @@ import type { Users } from '../../users/src/mongo-schemas';
 import { CurrentUser } from './decorators';
 import type { RegisterUserDto } from './dtos';
 import { JwtAuthGuard, LocalAuthGuard } from './guards';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services';
 import type { AuthRequest } from './types';
 
 @Controller('auth')
