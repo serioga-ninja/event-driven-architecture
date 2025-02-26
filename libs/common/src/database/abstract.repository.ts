@@ -1,10 +1,5 @@
 import { Logger } from '@nestjs/common';
-import type {
-  ClientSession,
-  Connection,
-  Model,
-  RootFilterQuery,
-} from 'mongoose';
+import type { AnyKeys, Connection, Model, RootFilterQuery } from 'mongoose';
 
 type FindOneOptions<T> = {
   select?: (keyof T)[];
@@ -37,8 +32,8 @@ export default abstract class AbstractRepository<Entity> {
     return this.model.findById(id);
   }
 
-  create(data: any, session?: ClientSession) {
-    return this.model.create([data], { session });
+  create(data: AnyKeys<Entity>) {
+    return this.model.create(data);
   }
 
   // async startTransaction() {

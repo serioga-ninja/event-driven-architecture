@@ -1,3 +1,3 @@
-import UserSignUpEvent from './user-sign-up.event';
+import UserRegisteredEvent from './userRegisteredEvent';
 
-export { UserSignUpEvent };
+export { UserRegisteredEvent };

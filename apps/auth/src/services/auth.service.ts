@@ -7,10 +7,12 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CommandBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateUserEvent } from '../../../users/src/events';
 import type { Users } from '../../../users/src/mongo-schemas';
+import { RegisterUserCommand } from '../commands';
 import type { RegisterUserDto } from '../dtos';
 import { AuthRepository } from '../repositories';
 import PasswordService from './passwords.service';
@@ -29,7 +31,12 @@ export default class AuthService {
     private readonly _authRepository: AuthRepository,
     private readonly _passwordService: PasswordService,
     @Inject(EMAILS_SERVICE) private readonly _emailsService: ClientProxy,
+    private _commandBus: CommandBus,
   ) {}
+
+  registerUser(createUserRequest: RegisterUserDto) {
+    return this._commandBus.execute(new RegisterUserCommand(createUserRequest));
+  }
 
   async createUser(createUserRequest: RegisterUserDto) {
     await this.validateCreateUserRequest(createUserRequest);

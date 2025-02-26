@@ -20,7 +20,7 @@ export class AuthController {
 
   @Post('register')
   handleRegisterRequest(@Body() body: RegisterUserDto) {
-    return this.authService.createUser(body);
+    return this.authService.registerUser(body);
   }
 
   @UseGuards(JwtAuthGuard)
