@@ -21,7 +21,7 @@ export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const token = req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Token not found');
     }
 
     const user = await this._jwtService.verifyAsync<TokenPayload>(token, {
@@ -30,9 +30,15 @@ export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid token');
     }
 
-    return this._authCacheService.getAuthUserCache(user._id);
+    const authUser = await this._authCacheService.getAuthUserCache(user._id);
+
+    if (!authUser) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return authUser;
   }
 }
