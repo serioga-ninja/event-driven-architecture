@@ -2,7 +2,7 @@ import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import type { Users } from '../../../users/src/mongo-schemas';
 import type { RegisterUserDto } from '../dtos';
-import UserRegisteredEvent from '../events/userRegisteredEvent';
+import UserRegisteredEvent from '../events/user-registered.event';
 import { AuthRepository } from '../repositories';
 import PasswordService from '../services/passwords.service';
 import RegisterUserCommand from './register-user.command';
@@ -28,7 +28,10 @@ export default class RegisterUserHandler
     const user = await this._authRepository.create(createUserRequest);
     this._eventBus.publish(new UserRegisteredEvent(user.email));
 
-    return user as Users;
+    return {
+      id: user._id,
+      email: user.email,
+    };
   }
 
   private async validateCreateUserRequest(request: RegisterUserDto) {

@@ -12,12 +12,16 @@ import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UsersSchema } from '../../users/src/mongo-schemas';
 import { AuthController } from './auth.controller';
-import RegisterUserHandler from './commands/register-user.handler';
-import SendRegistrationEmailHandler from './commands/send-registration-email.handler';
+import {
+  LoginUserHandler,
+  RegisterUserHandler,
+  ResetAuthUserCacheHandler,
+  SendRegistrationEmailHandler,
+} from './commands';
 import { AuthRepository } from './repositories';
 import { authConfigSchema } from './schemas';
-import { AuthService, PasswordService } from './services';
-import AuthSaga from './services/auth.saga';
+import { AuthSaga, AuthService, PasswordService } from './services';
+import AuthCacheService from './services/auth-cache.service';
 import { JwtStrategy, LocalStrategy } from './strategies';
 
 @Module({
@@ -47,13 +51,16 @@ import { JwtStrategy, LocalStrategy } from './strategies';
   controllers: [AuthController],
   providers: [
     AuthService,
+    AuthSaga,
+    AuthCacheService,
+    PasswordService,
     LocalStrategy,
     JwtStrategy,
-    PasswordService,
     AuthRepository,
     RegisterUserHandler,
     SendRegistrationEmailHandler,
-    AuthSaga,
+    LoginUserHandler,
+    ResetAuthUserCacheHandler,
   ],
 })
 export class AuthModule {}

@@ -1,81 +1,37 @@
-import { EMAILS_SERVICE } from '@app/common';
-import {
-  Inject,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { CommandBus } from '@nestjs/cqrs';
-import { JwtService } from '@nestjs/jwt';
-import { ClientProxy } from '@nestjs/microservices';
-import { CreateUserEvent } from '../../../users/src/events';
-import type { Users } from '../../../users/src/mongo-schemas';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { CommandBus, EventBus } from '@nestjs/cqrs';
+import { pick } from 'lodash';
 import { RegisterUserCommand } from '../commands';
+import LoginUserCommand from '../commands/login-user.command';
 import type { RegisterUserDto } from '../dtos';
+import { UserLoggedOutEvent } from '../events';
 import { AuthRepository } from '../repositories';
+import { AuthUser } from '../types';
+import AuthCacheService from './auth-cache.service';
 import PasswordService from './passwords.service';
-
-export type TokenPayload = {
-  userId: string;
-};
 
 @Injectable()
 export default class AuthService {
-  private readonly _logger = new Logger(AuthService.name);
-
   constructor(
-    private readonly _configService: ConfigService,
-    private readonly _jwtService: JwtService,
     private readonly _authRepository: AuthRepository,
     private readonly _passwordService: PasswordService,
-    @Inject(EMAILS_SERVICE) private readonly _emailsService: ClientProxy,
-    private _commandBus: CommandBus,
+    private readonly _commandBus: CommandBus,
+    private readonly _authCacheService: AuthCacheService,
+    private readonly _eventBus: EventBus,
   ) {}
 
   registerUser(createUserRequest: RegisterUserDto) {
     return this._commandBus.execute(new RegisterUserCommand(createUserRequest));
   }
 
-  async registerUserAsService(createUserRequest: RegisterUserDto) {
-    await this.validateCreateUserRequest(createUserRequest);
-
-    createUserRequest.password = this._passwordService.generatePassword(
-      createUserRequest.password,
-    );
-    const user = await this._authRepository.create(createUserRequest);
-
-    this._emailsService.emit(
-      CreateUserEvent.type,
-      new CreateUserEvent(createUserRequest.email),
-    );
-
-    return user;
+  login(user: AuthUser) {
+    return this._commandBus.execute(new LoginUserCommand(user));
   }
 
-  login(user: Users) {
-    const tokenPayload: TokenPayload = {
-      userId: user._id,
-    };
+  async logout(user: AuthUser) {
+    await this._authCacheService.removeAuthUserCache(user._id);
 
-    const expires = new Date();
-    expires.setSeconds(
-      expires.getSeconds() + this._configService.get('JWT_EXPIRATION'),
-    );
-
-    const token = this._jwtService.sign(tokenPayload, {
-      secret: this._configService.get('JWT_SECRET'),
-    });
-
-    return {
-      token,
-      expires,
-    };
-  }
-
-  logout() {
-    // clear redis session
+    this._eventBus.publish(new UserLoggedOutEvent(user));
   }
 
   async validateUser(email: string, password: string) {
@@ -85,26 +41,10 @@ export default class AuthService {
       user?.password || '',
     );
 
-    if (!passwordIsValid) {
+    if (!passwordIsValid || !user) {
       throw new UnauthorizedException('Credentials are not valid.');
     }
 
-    return user;
-  }
-
-  private async validateCreateUserRequest(request: RegisterUserDto) {
-    let user: Users | null = null;
-
-    try {
-      user = await this._authRepository.findOneBy({
-        email: request.email,
-      });
-    } catch (err) {
-      this._logger.error(err);
-    }
-
-    if (user) {
-      throw new UnprocessableEntityException('Email already exists.');
-    }
+    return pick(user.toObject(), '_id', 'email');
   }
 }

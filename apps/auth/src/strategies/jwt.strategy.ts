@@ -1,32 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import AuthRepository from '../repositories/auth.repository';
-import { TokenPayload } from '../services/auth.service';
+import { FastifyRequest } from 'fastify';
+import { Strategy } from 'passport-custom';
+import AuthCacheService from '../services/auth-cache.service';
+import { TokenPayload } from '../types';
 
 @Injectable()
-export default class JwtStrategy extends PassportStrategy(Strategy) {
+export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
-    configService: ConfigService,
-    private readonly _authRepository: AuthRepository,
+    private readonly _configService: ConfigService,
+    private readonly _authCacheService: AuthCacheService,
+    private readonly _jwtService: JwtService,
   ) {
-    super({
-      jwtFromRequest: ExtractJwt.fromExtractors<{
-        authorization: string | null;
-      }>([
-        (request) => {
-          console.log('request', request);
-
-          return request?.authorization;
-        },
-      ]),
-      ignoreExpiration: true,
-      secretOrKey: configService.get('JWT_SECRET') as string,
-    });
+    super();
   }
 
-  validate({ userId }: TokenPayload) {
-    return this._authRepository.findOneById(userId);
+  async validate(req: FastifyRequest) {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await this._jwtService.verifyAsync<TokenPayload>(token, {
+      algorithms: ['HS256'],
+      secret: this._configService.get('JWT_SECRET'),
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return this._authCacheService.getAuthUserCache(user._id);
   }
 }
