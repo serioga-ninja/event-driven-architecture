@@ -38,7 +38,7 @@ export default class AuthService {
     return this._commandBus.execute(new RegisterUserCommand(createUserRequest));
   }
 
-  async createUser(createUserRequest: RegisterUserDto) {
+  async registerUserAsService(createUserRequest: RegisterUserDto) {
     await this.validateCreateUserRequest(createUserRequest);
 
     createUserRequest.password = this._passwordService.generatePassword(

@@ -19,8 +19,6 @@ export default class SendRegistrationEmailHandler
       new CreateUserEvent(command.email),
     );
 
-    console.log('Email sent to: ', command.email);
-
     return Promise.resolve();
   }
 }

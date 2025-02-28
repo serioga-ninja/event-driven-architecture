@@ -1,12 +1,13 @@
-import type { CacheConfig } from '@app/common';
-import type { Request } from 'express';
+import type { CacheConfig, NODE_ENV } from '@app/common';
+import type { FastifyRequest } from 'fastify';
 import type { Users } from '../../../users/src/mongo-schemas';
 
-export type AuthRequest = Request & { user: Users };
+export type AuthRequest = FastifyRequest & { user: Users };
 export type AuthConfigs = {
   PORT: number;
   JWT_SECRET: string;
   JWT_EXPIRATION: number;
   MONGODB_URI: string;
   RABBIT_MQ_URI: string;
+  NODE_ENV: NODE_ENV;
 } & CacheConfig;

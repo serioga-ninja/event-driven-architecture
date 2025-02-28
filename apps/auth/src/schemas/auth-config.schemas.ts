@@ -4,6 +4,7 @@ import type { AuthConfigs } from '../types';
 
 export const authConfigSchema = cacheConfigSchema.concat(
   Joi.object<AuthConfigs>({
+    NODE_ENV: Joi.string().required(),
     JWT_SECRET: Joi.string().required(),
     JWT_EXPIRATION: Joi.string().required(),
     MONGODB_URI: Joi.string().required(),
