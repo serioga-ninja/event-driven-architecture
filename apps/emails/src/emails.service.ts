@@ -1,11 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import type { CreateUserEvent } from '../../users/src/events';
+import { Injectable } from '@nestjs/common';
+import { SendEmailProps } from './email-providers/email-abstract.provider';
+import MailgunEmailProvider from './email-providers/mailgun-email.provider';
 
 @Injectable()
-export class EmailsService {
-  private readonly logger = new Logger(EmailsService.name);
+export default class EmailsService {
+  constructor(private readonly _mailgunEmailProvider: MailgunEmailProvider) {}
 
-  handleUserCreated(data: CreateUserEvent) {
-    this.logger.log(`User created: ${data.email}`);
+  sendEmail(params: SendEmailProps) {
+    return this._mailgunEmailProvider.sendEmail(params);
   }
 }

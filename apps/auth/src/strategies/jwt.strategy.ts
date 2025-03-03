@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { FastifyRequest } from 'fastify';
 import { Strategy } from 'passport-custom';
-import AuthCacheService from '../services/auth-cache.service';
+import { AuthCacheService } from '../services';
 import { TokenPayload } from '../types';
 
 @Injectable()

@@ -11,7 +11,9 @@ export default class AuthSaga {
   userRegistered = (events$: Observable<any>) => {
     return events$.pipe(
       ofType(UserRegisteredEvent),
-      mergeMap((event) => of(new SendRegistrationEmailCommand(event.email))),
+      mergeMap((event) =>
+        of(new SendRegistrationEmailCommand(event.id, event.email)),
+      ),
     );
   };
 

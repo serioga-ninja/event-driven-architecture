@@ -3,12 +3,29 @@ import type { HydratedDocument } from 'mongoose';
 
 export type UsersDocument = HydratedDocument<Users>;
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Users {
   declare _id: string;
 
+  @Prop({ required: false, default: '' })
+  firstName: string;
+
+  @Prop({ required: false, default: '' })
+  lastName: string;
+
+  @Prop({ required: false, default: '' })
+  phoneNumber: string;
+
+  @Prop({ required: true, default: false })
+  phoneNumberConfirmed: boolean;
+
   @Prop({ required: true })
   email: string;
+
+  @Prop({ required: true, default: false })
+  emailConfirmed: boolean;
 
   @Prop({ required: true })
   password: string;

@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, NotFoundException } from '@nestjs/common';
 import type { AnyKeys, Connection, Model, RootFilterQuery } from 'mongoose';
 
 type FindOneOptions<T> = {
@@ -30,6 +30,16 @@ export default abstract class AbstractRepository<Entity> {
 
   findOneById(id: string) {
     return this.model.findById(id);
+  }
+
+  async findOneByIdOrThrow(id: string) {
+    const model = await this.model.findById(id);
+
+    if (!model) {
+      throw new NotFoundException('Model not found');
+    }
+
+    return model;
   }
 
   create(data: AnyKeys<Entity>) {

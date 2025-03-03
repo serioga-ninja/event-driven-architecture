@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Auth Server" type="NodeJSConfigurationType" node-parameters="-r ts-node/register -r tsconfig-paths/register" path-to-js-file="apps/auth/src/main.ts" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>
