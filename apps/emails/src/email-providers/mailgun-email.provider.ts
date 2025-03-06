@@ -36,6 +36,8 @@ export default class MailgunEmailProvider extends EmailAbstractProvider {
       );
     } catch (error) {
       this._logger.error(error);
+
+      throw error;
     }
   }
 }

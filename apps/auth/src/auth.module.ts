@@ -6,10 +6,10 @@ import {
   RmqModule,
 } from '@app/common';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
-import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import CommonModule from '../../../libs/common/src/common/common.module';
 import { Users, UsersSchema } from '../../users/src/mongo-schemas';
 import { AuthController } from './auth.controller';
 import {
@@ -34,13 +34,7 @@ import { JwtStrategy, LocalStrategy } from './strategies';
     }),
     DatabaseModule,
     RmqModule,
-    JwtModule.registerAsync({
-      useFactory: (config: ConfigService) => ({
-        secret: config.get('JWT_SECRET'),
-        signOptions: { expiresIn: config.get('JWT_EXPIRATION') },
-      }),
-      inject: [ConfigService],
-    }),
+    CommonModule,
     RmqModule.register({
       name: EMAILS_SERVICE,
       queue: EMAILS_QUEUE,

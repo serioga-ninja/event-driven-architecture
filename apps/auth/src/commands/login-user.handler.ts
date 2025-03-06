@@ -1,7 +1,7 @@
+import { JwtService } from '@app/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { JwtService } from '@nestjs/jwt';
 import { UserLoggedInEvent } from '../events';
 import { TokenPayload } from '../types';
 import LoginUserCommand from './login-user.command';
@@ -28,10 +28,7 @@ export default class LoginUserHandler
       expires.getSeconds() + this._configService.get('JWT_EXPIRATION'),
     );
 
-    const token = this._jwtService.sign(tokenPayload, {
-      algorithm: 'HS256',
-      secret: this._configService.get('JWT_SECRET'),
-    });
+    const token = this._jwtService.sign(tokenPayload);
     this._eventBus.publish(new UserLoggedInEvent(user, token));
     this._logger.log(`User ${user.email} logged in.`);
 
