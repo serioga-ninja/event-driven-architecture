@@ -1,7 +1,7 @@
-import { Module, type DynamicModule } from '@nestjs/common';
-import RmqService from './rmq.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { type DynamicModule, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import RmqService from './rmq.service';
 
 type RmqModuleOptions = {
   name: string;
@@ -13,12 +13,16 @@ type RmqModuleOptions = {
   exports: [RmqService],
 })
 export default class RmqModule {
-  static register({ name, queue }: RmqModuleOptions): DynamicModule {
+  static register(
+    options: RmqModuleOptions | RmqModuleOptions[],
+  ): DynamicModule {
+    const arrOptions = Array.isArray(options) ? options : [options];
+
     return {
       module: RmqModule,
       imports: [
-        ClientsModule.registerAsync([
-          {
+        ClientsModule.registerAsync(
+          arrOptions.map(({ name, queue }) => ({
             name,
             useFactory: (ConfigService: ConfigService) => ({
               transport: Transport.RMQ,
@@ -28,8 +32,8 @@ export default class RmqModule {
               },
             }),
             inject: [ConfigService],
-          },
-        ]),
+          })),
+        ),
       ],
       exports: [ClientsModule],
     };
