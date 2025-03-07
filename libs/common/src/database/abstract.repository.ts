@@ -5,6 +5,11 @@ type FindOneOptions<T> = {
   select?: (keyof T)[];
 };
 
+type FindManyOptions<T> = {
+  select?: (keyof T)[];
+  limit?: number;
+};
+
 export default abstract class AbstractRepository<Entity> {
   protected readonly logger: Logger;
 
@@ -23,6 +28,23 @@ export default abstract class AbstractRepository<Entity> {
 
     if (options.select) {
       qb.select(options.select as string[]);
+    }
+
+    return qb.exec();
+  }
+
+  findManyBy(
+    query: RootFilterQuery<Entity>,
+    options: FindManyOptions<Entity> = {},
+  ) {
+    const qb = this.model.find(query);
+
+    if (options.select) {
+      qb.select(options.select as string[]);
+    }
+
+    if (options.limit) {
+      qb.limit(options.limit);
     }
 
     return qb.exec();

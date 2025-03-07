@@ -1,6 +1,7 @@
 import { EMAILS_QUEUE, EMAILS_SERVICE } from '@app/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import FallbackEvent from './events/fallback.event';
 import FallbackRepository from './fallback.repository';
 import { FallbackEvents } from './mongo-schemas';
@@ -31,6 +32,24 @@ export class FallbackService {
     setTimeout(() => {
       this._handleEvent(entity);
     }, retryInSec * 1000);
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async handleExpiredEvents() {
+    this._logger.debug('Searching for expired events to handle');
+
+    const expiredEvents = await this._fallbackRepository.findManyBy(
+      {
+        triggerAt: { $lte: new Date() },
+      },
+      { limit: 10 },
+    );
+
+    this._logger.debug('Found expired events:', expiredEvents.length);
+
+    for (const entity of expiredEvents) {
+      await this._handleEvent(entity);
+    }
   }
 
   private async _handleEvent(entity: FallbackEvents) {

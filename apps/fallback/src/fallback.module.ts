@@ -7,6 +7,7 @@ import {
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
 import { FallbackController } from './fallback.controller';
 import FallbackRepository from './fallback.repository';
 import { FallbackService } from './fallback.service';
@@ -28,6 +29,7 @@ import { fallbackConfigSchema } from './schemas';
     MongooseModule.forFeature([
       { name: FallbackEvents.name, schema: FallbackSchema },
     ]),
+    ScheduleModule.forRoot(),
   ],
   controllers: [FallbackController],
   providers: [FallbackService, FallbackRepository],
