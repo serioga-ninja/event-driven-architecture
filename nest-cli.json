@@ -37,6 +37,15 @@
         "tsConfigPath": "apps/emails/tsconfig.app.json"
       }
     },
+    "fallback": {
+      "type": "application",
+      "root": "apps/fallback",
+      "entryFile": "main",
+      "sourceRoot": "apps/fallback/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/fallback/tsconfig.app.json"
+      }
+    },
     "users": {
       "type": "application",
       "root": "apps/users",

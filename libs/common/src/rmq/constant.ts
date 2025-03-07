@@ -1,6 +1,9 @@
 export const EMAILS_SERVICE = 'EMAILS_SERVICE';
 export const EMAILS_QUEUE = 'emails';
 
+export const FALLBACK_SERVICE = 'FALLBACK_SERVICE';
+export const FALLBACK_QUEUE = 'fallback';
+
 export const USERS_SERVICE = 'USERS_SERVICE';
 export const USERS_QUEUE = 'users';
 

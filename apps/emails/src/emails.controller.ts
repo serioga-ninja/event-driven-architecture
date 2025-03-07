@@ -23,7 +23,6 @@ export class EmailsController {
     @Payload() data: SendEmailEvent,
     @Ctx() context: RmqContext,
   ) {
-    this._logger.log('EmailsController.handleUserCreated', data);
     await this.emailsService.sendEmail(data.payload);
     this.rmqService.ack(context);
   }

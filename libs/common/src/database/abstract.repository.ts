@@ -46,6 +46,10 @@ export default abstract class AbstractRepository<Entity> {
     return this.model.create(data);
   }
 
+  deleteById(id: string) {
+    return this.model.findByIdAndDelete(id);
+  }
+
   // async startTransaction() {
   //   const session = await this.connection.startSession();
   //   session.startTransaction();
