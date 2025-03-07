@@ -14,15 +14,15 @@ export class FallbackService {
     private readonly _fallbackRepository: FallbackRepository,
   ) {}
 
-  async saveFallbackEvent(event: FallbackEvent) {
-    this._logger.log(`Saving fallback event: ${event.data.eventType}`);
+  async saveFallbackEvent(fallbackEvent: FallbackEvent) {
+    this._logger.log(`Saving fallback event: ${fallbackEvent.data.eventType}`);
 
-    const { data, queue, retryInSec, eventType } = event.data;
+    const { event, queue, retryInSec, eventType } = fallbackEvent.data;
     const triggerAt = new Date();
     triggerAt.setSeconds(triggerAt.getSeconds() + retryInSec);
 
     const entity = await this._fallbackRepository.create({
-      data,
+      event,
       eventType,
       queue,
       triggerAt,
@@ -35,12 +35,12 @@ export class FallbackService {
 
   private async _handleEvent(entity: FallbackEvents) {
     try {
-      const { queue, _id, data, eventType } = entity;
+      const { queue, _id, event, eventType } = entity;
       const service = this._getService(queue);
 
       if (service) {
         this._logger.log(`Handling fallback event: ${eventType}`);
-        service.emit(eventType, data);
+        service.emit(eventType, event);
 
         await this._fallbackRepository.deleteById(_id);
       }

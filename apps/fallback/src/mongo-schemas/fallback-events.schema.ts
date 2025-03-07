@@ -10,7 +10,7 @@ export class FallbackEvents {
   declare _id: string;
 
   @Prop({ required: false, default: {}, type: Object })
-  data: object;
+  event: object;
 
   @Prop({ required: true })
   eventType: string;

@@ -27,7 +27,7 @@ export default class EmailsService {
         FallbackEvent.type,
         new FallbackEvent({
           queue: EMAILS_QUEUE,
-          data: event,
+          event,
           retryInSec: this._configService.get('FALLBACK_RESEND_TIMEOUT_SEC'),
           eventType: SendEmailEvent.type,
         }),

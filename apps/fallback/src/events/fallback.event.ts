@@ -1,5 +1,5 @@
 type FallbackOptions = {
-  data: any;
+  event: object;
   eventType: string;
   retryInSec: number;
   queue: string;
