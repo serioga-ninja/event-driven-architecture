@@ -33,7 +33,6 @@ import { JwtStrategy, LocalStrategy } from './strategies';
       envFilePath: './apps/auth/.env',
     }),
     DatabaseModule,
-    RmqModule,
     CommonModule,
     RmqModule.register({
       name: EMAILS_SERVICE,

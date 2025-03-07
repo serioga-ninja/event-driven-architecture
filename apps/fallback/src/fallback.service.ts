@@ -15,6 +15,8 @@ export class FallbackService {
   ) {}
 
   async saveFallbackEvent(event: FallbackEvent) {
+    this._logger.log(`Saving fallback event: ${event.data.eventType}`);
+
     const { data, queue, retryInSec, eventType } = event.data;
     const triggerAt = new Date();
     triggerAt.setSeconds(triggerAt.getSeconds() + retryInSec);
@@ -37,6 +39,7 @@ export class FallbackService {
       const service = this._getService(queue);
 
       if (service) {
+        this._logger.log(`Handling fallback event: ${eventType}`);
         service.emit(eventType, data);
 
         await this._fallbackRepository.deleteById(_id);

@@ -1,4 +1,4 @@
-import { RmqModule } from '@app/common';
+import { FALLBACK_QUEUE, FALLBACK_SERVICE, RmqModule } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import MailgunEmailProvider from './email-providers/mailgun-email.provider';
@@ -13,7 +13,10 @@ import { emailsConfigSchema } from './schemas';
       validationSchema: emailsConfigSchema,
       envFilePath: './apps/emails/.env',
     }),
-    RmqModule,
+    RmqModule.register({
+      name: FALLBACK_SERVICE,
+      queue: FALLBACK_QUEUE,
+    }),
   ],
   controllers: [EmailsController],
   providers: [EmailsService, MailgunEmailProvider],

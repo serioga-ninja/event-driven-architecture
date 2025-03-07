@@ -9,7 +9,7 @@ export type FallbackDocument = HydratedDocument<FallbackEvents>;
 export class FallbackEvents {
   declare _id: string;
 
-  @Prop({ required: false, default: {} })
+  @Prop({ required: false, default: {}, type: Object })
   data: object;
 
   @Prop({ required: true })

@@ -5,4 +5,5 @@ export const emailsConfigSchema = Joi.object<EmailConfig>({
   MAILGUN_API_KEY: Joi.string().required(),
   MAILGUN_DOMAIN: Joi.string().required(),
   MAILGUN_EMAIL_FROM: Joi.string().required(),
+  FALLBACK_RESEND_TIMEOUT_SEC: Joi.number().required(),
 });

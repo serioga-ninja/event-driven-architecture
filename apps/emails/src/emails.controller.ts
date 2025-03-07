@@ -1,5 +1,5 @@
 import { RmqService } from '@app/common';
-import { Controller, Logger } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import {
   Ctx,
   EventPattern,
@@ -11,8 +11,6 @@ import SendEmailEvent from './events/send-email.event';
 
 @Controller()
 export class EmailsController {
-  private _logger = new Logger(EmailsController.name);
-
   constructor(
     private readonly emailsService: EmailsService,
     private readonly rmqService: RmqService,
@@ -23,7 +21,8 @@ export class EmailsController {
     @Payload() data: SendEmailEvent,
     @Ctx() context: RmqContext,
   ) {
-    await this.emailsService.sendEmail(data.payload);
+    await this.emailsService.sendEmail(data);
+
     this.rmqService.ack(context);
   }
 }

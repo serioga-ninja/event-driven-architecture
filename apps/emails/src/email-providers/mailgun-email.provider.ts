@@ -24,20 +24,14 @@ export default class MailgunEmailProvider extends EmailAbstractProvider {
   }
 
   async sendEmail(params: SendEmailProps): Promise<void> {
-    try {
-      await this._client.messages.create(
-        this.config.getOrThrow('MAILGUN_DOMAIN'),
-        {
-          from: params.from || this.config.getOrThrow('MAILGUN_EMAIL_FROM'),
-          to: params.to,
-          subject: params.subject,
-          html: params.html,
-        },
-      );
-    } catch (error) {
-      this._logger.error(error);
-
-      throw error;
-    }
+    await this._client.messages.create(
+      this.config.getOrThrow('MAILGUN_DOMAIN'),
+      {
+        from: params.from || this.config.getOrThrow('MAILGUN_EMAIL_FROM'),
+        to: params.to,
+        subject: params.subject,
+        html: params.html,
+      },
+    );
   }
 }
