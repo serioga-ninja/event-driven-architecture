@@ -14,23 +14,22 @@ import type { TokenPayload } from '@app/common';
 
 @Injectable()
 export default class JwtAuthGuard implements CanActivate {
-  constructor(@Inject(AUTH_SERVICE) private authClient: ClientProxy) {}
+  constructor(
+    @Inject(AUTH_SERVICE) private readonly _authClient: ClientProxy,
+  ) {}
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const authentication = this.getAuthentication(context);
 
-    return this.authClient
+    return this._authClient
       .send(ValidateUserEvent.type, new ValidateUserEvent(authentication))
       .pipe(
         tap((res) => {
-          console.log(res);
-
           this.addUser(res, context);
         }),
-        catchError((err) => {
-          console.error(err);
+        catchError(() => {
           throw new UnauthorizedException();
         }),
       );

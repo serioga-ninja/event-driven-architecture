@@ -3,18 +3,19 @@ import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { CurrentUser } from './decorators';
 import type { RegisterUserDto } from './dtos';
-import { JwtAuthGuard } from './guards';
+import { JwtAuthGuard, LocalAuthGuard } from './guards';
 import { AuthService } from './services';
-import type { AuthRequest } from './types';
+import { AuthRequest, LoginRequest } from './types';
 import LoginUserDto from './dtos/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  handleLoginRequest(@Body() body: LoginUserDto) {
-    return this.authService.login(body);
+  handleLoginRequest(@Request() req: LoginRequest, @Body() body: LoginUserDto) {
+    return this.authService.login(body, req.user);
   }
 
   @Post('register')

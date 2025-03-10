@@ -25,9 +25,7 @@ export default class AuthService {
     return this._commandBus.execute(new RegisterUserCommand(createUserRequest));
   }
 
-  async login(user: LoginUserDto) {
-    const authUser = await this.validateUserPassword(user.email, user.password);
-
+  async login(user: LoginUserDto, authUser: ValidateUserReturn) {
     if (authUser.isTfaEnabled) {
       if (!user.tfaCode) {
         return {
