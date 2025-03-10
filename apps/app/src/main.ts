@@ -1,5 +1,5 @@
 import { AllExceptionsFilter } from '@app/common';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
@@ -16,6 +16,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
