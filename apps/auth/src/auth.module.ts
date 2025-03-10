@@ -4,6 +4,7 @@ import {
   EMAILS_QUEUE,
   EMAILS_SERVICE,
   RmqModule,
+  GrpcModule,
 } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -40,6 +41,7 @@ import { JwtStrategy, LocalStrategy } from './strategies';
     }),
     CacheModule,
     MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
+    GrpcModule,
   ],
   controllers: [AuthController],
   providers: [

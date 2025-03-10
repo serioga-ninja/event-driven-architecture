@@ -6,6 +6,7 @@ export type AuthRequest = FastifyRequest & { user: AuthUser };
 export type LoginRequest = FastifyRequest & { user: ValidateUserReturn };
 export type AuthConfigs = {
   PORT: number;
+  GRPC_URI: string;
   JWT_SECRET: string;
   JWT_EXPIRATION: number;
   MONGODB_URI: string;

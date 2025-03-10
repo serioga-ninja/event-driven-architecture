@@ -1,10 +1,17 @@
-import { AllExceptionsFilter, AUTH_QUEUE, RmqService } from '@app/common';
+import {
+  AllExceptionsFilter,
+  AUTH_QUEUE,
+  RmqService,
+  GrpcService,
+} from '@app/common';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { AuthModule } from './auth.module';
 import type { AuthConfigs } from './types';
+import { join } from 'path';
+import * as process from 'node:process';
 
 async function bootstrap() {
   const app = await NestFactory.create(
@@ -12,8 +19,16 @@ async function bootstrap() {
     new FastifyAdapter({ logger: true }),
   );
   const rmqService = app.get(RmqService);
+  const grpcService = app.get(GrpcService);
 
   app.connectMicroservice(rmqService.getOptions(AUTH_QUEUE, true));
+  app.connectMicroservice(
+    grpcService.getOptions({
+      package: 'auth',
+      protoPath: join(process.cwd(), 'libs/common/src/auth/proto/auth.proto'),
+    }),
+  );
+
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
 

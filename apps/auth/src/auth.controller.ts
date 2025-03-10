@@ -1,6 +1,6 @@
 import { TokenPayload, ValidateUserEvent } from '@app/common';
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { GrpcMethod, MessagePattern } from '@nestjs/microservices';
 import { CurrentUser } from './decorators';
 import type { RegisterUserDto } from './dtos';
 import { JwtAuthGuard, LocalAuthGuard } from './guards';
@@ -30,6 +30,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @GrpcMethod('AuthService', 'Validate')
   @MessagePattern(ValidateUserEvent.type)
   validateUser(@CurrentUser() user: TokenPayload) {
     return user;

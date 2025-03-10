@@ -1,4 +1,4 @@
-import { JwtService, TokenPayload } from '@app/common';
+import { JwtService, TokenPayload, ValidateUserEvent } from '@app/common';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
@@ -13,8 +13,8 @@ export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super();
   }
 
-  async validate(req: { authorization?: string }) {
-    const token = this.extractToken(req.authorization);
+  async validate(req: ValidateUserEvent) {
+    const token = this.extractToken(req.authentication);
 
     if (!token) {
       throw new UnauthorizedException('Token not found');
