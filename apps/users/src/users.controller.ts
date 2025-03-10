@@ -4,7 +4,7 @@ import type { CreateUserDto } from './dtos';
 import { UsersService } from './users.service';
 
 @Controller('users')
-export class UsersController {
+export default class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()

@@ -1,12 +1,13 @@
 import type { ExecutionContext } from '@nestjs/common';
 import { createParamDecorator } from '@nestjs/common';
-import type { AuthRequest, AuthUser } from '../types';
+import type { FastifyRequest } from 'fastify';
+import {TokenPayload} from "../../../../types";
 
 const getCurrentUserByContext = (
   context: ExecutionContext,
-): AuthUser | undefined => {
+): TokenPayload | undefined => {
   if (context.getType() === 'http') {
-    return context.switchToHttp().getRequest<AuthRequest>().user;
+    return context.switchToHttp().getRequest<FastifyRequest>().user;
   }
 
   if (context.getType() === 'rpc') {

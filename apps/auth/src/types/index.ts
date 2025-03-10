@@ -1,4 +1,4 @@
-import type { CacheConfig, EmailConfig, NODE_ENV } from '@app/common';
+import type { CacheConfig, NODE_ENV } from '@app/common';
 import type { FastifyRequest } from 'fastify';
 import type { Users } from '../../../users/src/mongo-schemas';
 
@@ -10,7 +10,5 @@ export type AuthConfigs = {
   MONGODB_URI: string;
   RABBIT_MQ_URI: string;
   NODE_ENV: NODE_ENV;
-} & CacheConfig &
-  EmailConfig;
+} & CacheConfig;
 export type AuthUser = Pick<Users, '_id' | 'email'>;
-export type TokenPayload = AuthUser;

@@ -7,10 +7,12 @@ import {
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Request } from 'express';
+import { FastifyRequest } from 'fastify';
 import { catchError, Observable, tap } from 'rxjs';
-import type { Users } from '../../../../apps/users/src/mongo-schemas';
 import { AUTH_SERVICE } from '../rmq';
 import { ValidateUserEvent } from './events';
+
+import {TokenPayload} from "../../../../types";
 
 @Injectable()
 export default class JwtAuthGuard implements CanActivate {
@@ -36,7 +38,7 @@ export default class JwtAuthGuard implements CanActivate {
       );
   }
 
-  private getAuthentication(context: ExecutionContext) {
+  private getAuthentication(context: ExecutionContext): string {
     let authentication: string | null = null;
 
     if (context.getType() === 'rpc') {
@@ -62,11 +64,11 @@ export default class JwtAuthGuard implements CanActivate {
     return type === 'Bearer' ? token : null;
   }
 
-  private addUser(user: Users, context: ExecutionContext) {
+  private addUser(user: TokenPayload, context: ExecutionContext): void {
     if (context.getType() === 'rpc') {
       context.switchToRpc().getData().user = user;
     } else if (context.getType() === 'http') {
-      context.switchToHttp().getRequest().user = user;
+      context.switchToHttp().getRequest<FastifyRequest>().user = user;
     }
   }
 }

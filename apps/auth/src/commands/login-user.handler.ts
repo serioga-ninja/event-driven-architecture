@@ -3,8 +3,8 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserLoggedInEvent } from '../events';
-import { TokenPayload } from '../types';
 import LoginUserCommand from './login-user.command';
+import {TokenPayload} from "../../../../types";
 
 @CommandHandler(LoginUserCommand)
 export default class LoginUserHandler

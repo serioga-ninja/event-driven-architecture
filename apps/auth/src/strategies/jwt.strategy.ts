@@ -4,7 +4,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { FastifyRequest } from 'fastify';
 import { Strategy } from 'passport-custom';
 import { AuthCacheService } from '../services';
-import { TokenPayload } from '../types';
+
+import {TokenPayload} from "../../../../types";
 
 @Injectable()
 export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {

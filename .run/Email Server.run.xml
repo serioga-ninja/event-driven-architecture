@@ -1,5 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Email Server" type="NodeJSConfigurationType" node-parameters="-r ts-node/register -r tsconfig-paths/register" path-to-js-file="apps/emails/src/main.ts" working-dir="$PROJECT_DIR$">
+    <envs>
+      <env name="TS_NODE_FILES" value="true" />
+      <env name="TS_NODE_PRETTY" value="true" />
+      <env name="TS_NODE_PROJECTTS_NODE_PROJECT" value="./tsconfig.json" />
+    </envs>
     <method v="2" />
   </configuration>
 </component>

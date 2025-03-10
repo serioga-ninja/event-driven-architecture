@@ -7,10 +7,12 @@ import {
 } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { RouterModule } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UsersSchema } from './mongo-schemas';
 import { userConfigSchema } from './schemas';
-import { UsersController } from './users.controller';
+import { SecurityModule } from './security/security.module';
+import UsersController from './users.controller';
 import UsersRepository from './users.repository';
 import { UsersService } from './users.service';
 
@@ -28,6 +30,13 @@ import { UsersService } from './users.service';
       queue: EMAILS_QUEUE,
     }),
     AuthModule,
+    SecurityModule,
+    RouterModule.register([
+      {
+        path: 'security',
+        module: SecurityModule,
+      },
+    ]),
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],

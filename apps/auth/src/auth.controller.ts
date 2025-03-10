@@ -1,12 +1,12 @@
 import { ValidateUserEvent } from '@app/common';
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import type { Users } from '../../users/src/mongo-schemas';
 import { CurrentUser } from './decorators';
 import type { RegisterUserDto } from './dtos';
 import { JwtAuthGuard, LocalAuthGuard } from './guards';
 import { AuthService } from './services';
 import type { AuthRequest } from './types';
+import type { TokenPayload } from '../../../types';
 
 @Controller('auth')
 export class AuthController {
@@ -31,7 +31,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @MessagePattern(ValidateUserEvent.type)
-  validateUser(@CurrentUser() user: Users) {
+  validateUser(@CurrentUser() user: TokenPayload) {
     return user;
   }
 }
