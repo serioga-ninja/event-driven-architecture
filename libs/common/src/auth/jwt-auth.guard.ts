@@ -11,8 +11,7 @@ import { FastifyRequest } from 'fastify';
 import { catchError, Observable, tap } from 'rxjs';
 import { AUTH_SERVICE } from '../rmq';
 import { ValidateUserEvent } from './events';
-
-import {TokenPayload} from "../../../../types";
+import type { TokenPayload } from '../../../../types';
 
 @Injectable()
 export default class JwtAuthGuard implements CanActivate {

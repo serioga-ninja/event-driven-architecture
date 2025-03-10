@@ -10,7 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { MongooseModule } from '@nestjs/mongoose';
 import CommonModule from '../../../libs/common/src/common/common.module';
-import { Users, UsersSchema } from '../../users/src/mongo-schemas';
+import { Users, UsersSchema } from '../../app/src/users/mongo-schemas';
 import { AuthController } from './auth.controller';
 import {
   LoginUserHandler,

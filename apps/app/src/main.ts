@@ -5,19 +5,19 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
-import type { UserConfig } from './types';
-import { UsersModule } from './users.module';
+import type { UserConfig } from './users/types';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(
-    UsersModule,
+    AppModule,
     new FastifyAdapter({ logger: true }),
   );
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
 
-  useContainer(app.select(UsersModule), { fallbackOnErrors: true });
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const config = new DocumentBuilder()
     .setTitle('Cats example')

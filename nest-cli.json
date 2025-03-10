@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/users/src",
+  "sourceRoot": "apps/app/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/users/tsconfig.app.json"
+    "tsConfigPath": "apps/app/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/users",
+  "root": "apps/app",
   "projects": {
     "auth": {
       "type": "application",
@@ -46,13 +46,13 @@
         "tsConfigPath": "apps/fallback/tsconfig.app.json"
       }
     },
-    "users": {
+    "app": {
       "type": "application",
-      "root": "apps/users",
+      "root": "apps/app",
       "entryFile": "main",
-      "sourceRoot": "apps/users/src",
+      "sourceRoot": "apps/app/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/users/tsconfig.app.json"
+        "tsConfigPath": "apps/app/tsconfig.app.json"
       }
     }
   }

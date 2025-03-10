@@ -1,6 +1,6 @@
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import type { Users } from '../../../users/src/mongo-schemas';
+import type { Users } from '../../../app/src/users/mongo-schemas';
 import type { RegisterUserDto } from '../dtos';
 import UserRegisteredEvent from '../events/user-registered.event';
 import { AuthRepository } from '../repositories';
