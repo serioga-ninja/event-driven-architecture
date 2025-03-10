@@ -1,14 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { pick } from 'lodash';
-import { RegisterUserCommand } from '../commands';
-import LoginUserCommand from '../commands/login-user.command';
+import { LoginUserCommand, RegisterUserCommand } from '../commands';
 import type { RegisterUserDto } from '../dtos';
 import { UserLoggedOutEvent } from '../events';
 import { AuthRepository } from '../repositories';
-import { AuthUser } from '../types';
+import { AuthUser, ValidateUserReturn } from '../types';
 import AuthCacheService from './auth-cache.service';
 import PasswordService from './passwords.service';
+import LoginUserDto from '../dtos/login-user.dto';
+import { authenticator } from 'otplib';
 
 @Injectable()
 export default class AuthService {
@@ -24,8 +25,32 @@ export default class AuthService {
     return this._commandBus.execute(new RegisterUserCommand(createUserRequest));
   }
 
-  login(user: AuthUser) {
-    return this._commandBus.execute(new LoginUserCommand(user));
+  async login(user: LoginUserDto) {
+    const authUser = await this.validateUserPassword(user.email, user.password);
+
+    if (authUser.isTfaEnabled) {
+      if (!user.tfaCode) {
+        return {
+          isTfaEnabled: true,
+        };
+      } else {
+        const isValid = authenticator.verify({
+          secret: authUser.tfaSecret,
+          token: user.tfaCode,
+        });
+
+        if (!isValid) {
+          throw new UnauthorizedException('Invalid 2FA token');
+        }
+      }
+    }
+
+    return this._commandBus.execute(
+      new LoginUserCommand({
+        _id: authUser._id,
+        email: authUser.email,
+      }),
+    );
   }
 
   async logout(user: AuthUser) {
@@ -34,8 +59,14 @@ export default class AuthService {
     this._eventBus.publish(new UserLoggedOutEvent(user));
   }
 
-  async validateUser(email: string, password: string) {
-    const user = await this._authRepository.findOneBy({ email });
+  async validateUserPassword(
+    email: string,
+    password: string,
+  ): Promise<ValidateUserReturn> {
+    const user = await this._authRepository.findOneBy(
+      { email },
+      { select: ['_id', 'email', 'password', 'isTfaEnabled', 'tfaSecret'] },
+    );
     const passwordIsValid = this._passwordService.comparePasswords(
       password,
       user?.password || '',
@@ -45,6 +76,6 @@ export default class AuthService {
       throw new UnauthorizedException('Credentials are not valid.');
     }
 
-    return pick(user.toObject(), '_id', 'email');
+    return pick(user.toObject(), ['_id', 'email', 'isTfaEnabled', 'tfaSecret']);
   }
 }

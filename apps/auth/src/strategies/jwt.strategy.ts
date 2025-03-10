@@ -1,11 +1,8 @@
-import { JwtService } from '@app/common';
+import { JwtService, TokenPayload } from '@app/common';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { FastifyRequest } from 'fastify';
 import { Strategy } from 'passport-custom';
 import { AuthCacheService } from '../services';
-
-import {TokenPayload} from "../../../../types";
 
 @Injectable()
 export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -16,8 +13,8 @@ export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super();
   }
 
-  async validate(req: FastifyRequest) {
-    const token = req.headers.authorization?.split(' ')[1];
+  async validate(req: { authorization?: string }) {
+    const token = this.extractToken(req.authorization);
 
     if (!token) {
       throw new UnauthorizedException('Token not found');
@@ -36,5 +33,11 @@ export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     }
 
     return authUser;
+  }
+
+  private extractToken(str?: string): string | null {
+    const [type, token] = str?.split(' ') ?? [];
+
+    return type === 'Bearer' ? token : null;
   }
 }

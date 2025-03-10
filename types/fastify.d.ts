@@ -1,7 +1,5 @@
 import type { FastifyRequest as Request } from 'fastify';
-import type { AuthUser } from '../apps/auth/src/types';
-
-export type TokenPayload = AuthUser;
+import type { TokenPayload } from '@app/common';
 
 declare module 'fastify' {
   interface FastifyRequest extends Request {

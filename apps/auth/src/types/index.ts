@@ -12,3 +12,7 @@ export type AuthConfigs = {
   NODE_ENV: NODE_ENV;
 } & CacheConfig;
 export type AuthUser = Pick<Users, '_id' | 'email'>;
+export type ValidateUserReturn = Pick<
+  Users,
+  '_id' | 'email' | 'isTfaEnabled' | 'tfaSecret'
+>;

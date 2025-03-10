@@ -5,8 +5,8 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
-import type { UserConfig } from './users/types';
 import { AppModule } from './app.module';
+import type { AppConfig } from './app.types';
 
 async function bootstrap() {
   const app = await NestFactory.create(
@@ -18,6 +18,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter());
   app.enableVersioning({
     type: VersioningType.URI,
+    defaultVersion: '1',
   });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
@@ -31,7 +32,7 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
-  const configService = app.get(ConfigService<UserConfig, true>);
+  const configService = app.get(ConfigService<AppConfig, true>);
 
   await app.listen(configService.get('PORT'));
 }

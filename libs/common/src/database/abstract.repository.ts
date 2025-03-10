@@ -1,5 +1,11 @@
 import { Logger, NotFoundException } from '@nestjs/common';
-import type { AnyKeys, Connection, Model, RootFilterQuery } from 'mongoose';
+import type {
+  AnyKeys,
+  Connection,
+  Model,
+  RootFilterQuery,
+  UpdateQuery,
+} from 'mongoose';
 
 type FindOneOptions<T> = {
   select?: (keyof T)[];
@@ -18,6 +24,10 @@ export default abstract class AbstractRepository<Entity> {
     protected readonly connection: Connection,
   ) {
     this.logger = new Logger(this.constructor.name);
+  }
+
+  updateOneBy(where: UpdateQuery<Entity>, data: AnyKeys<Entity>) {
+    return this.model.updateOne(where, data);
   }
 
   findOneBy(
@@ -54,8 +64,8 @@ export default abstract class AbstractRepository<Entity> {
     return this.model.findById(id);
   }
 
-  async findOneByIdOrThrow(id: string) {
-    const model = await this.model.findById(id);
+  async findOneByOrThrow(query: RootFilterQuery<Entity>) {
+    const model = await this.model.findOne(query);
 
     if (!model) {
       throw new NotFoundException('Model not found');

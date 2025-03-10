@@ -6,12 +6,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Request } from 'express';
 import { FastifyRequest } from 'fastify';
 import { catchError, Observable, tap } from 'rxjs';
 import { AUTH_SERVICE } from '../rmq';
 import { ValidateUserEvent } from './events';
-import type { TokenPayload } from '../../../../types';
+import type { TokenPayload } from '@app/common';
 
 @Injectable()
 export default class JwtAuthGuard implements CanActivate {
@@ -43,9 +42,9 @@ export default class JwtAuthGuard implements CanActivate {
     if (context.getType() === 'rpc') {
       authentication = context.switchToRpc().getData().Authentication;
     } else if (context.getType() === 'http') {
-      authentication = this.extractTokenFromHeader(
-        context.switchToHttp().getRequest(),
-      );
+      authentication =
+        context.switchToHttp().getRequest<FastifyRequest>().headers
+          .authorization || null;
     }
 
     if (!authentication) {
@@ -55,12 +54,6 @@ export default class JwtAuthGuard implements CanActivate {
     }
 
     return authentication;
-  }
-
-  private extractTokenFromHeader(request: Request): string | null {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-
-    return type === 'Bearer' ? token : null;
   }
 
   private addUser(user: TokenPayload, context: ExecutionContext): void {

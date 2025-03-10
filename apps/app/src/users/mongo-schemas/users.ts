@@ -29,6 +29,12 @@ export class Users {
 
   @Prop({ required: true })
   password: string;
+
+  @Prop({ required: false, default: false })
+  isTfaEnabled: boolean;
+
+  @Prop({ required: false, default: null, select: false })
+  tfaSecret: string;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);

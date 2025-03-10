@@ -1,10 +1,9 @@
-import { JwtService } from '@app/common';
+import { JwtService, TokenPayload } from '@app/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserLoggedInEvent } from '../events';
 import LoginUserCommand from './login-user.command';
-import {TokenPayload} from "../../../../types";
 
 @CommandHandler(LoginUserCommand)
 export default class LoginUserHandler
@@ -29,7 +28,7 @@ export default class LoginUserHandler
     );
 
     const token = this._jwtService.sign(tokenPayload);
-    this._eventBus.publish(new UserLoggedInEvent(user, token));
+    this._eventBus.publish(new UserLoggedInEvent(user));
     this._logger.log(`User ${user.email} logged in.`);
 
     return Promise.resolve({

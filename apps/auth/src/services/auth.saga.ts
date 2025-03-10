@@ -21,9 +21,7 @@ export default class AuthSaga {
   userLoggedIn = (events$: Observable<any>) => {
     return events$.pipe(
       ofType(UserLoggedInEvent),
-      mergeMap((event) =>
-        of(new ResetAuthUserCacheCommand(event.user, event.token)),
-      ),
+      mergeMap((event) => of(new ResetAuthUserCacheCommand(event.user))),
     );
   };
 }

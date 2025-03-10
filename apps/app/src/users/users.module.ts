@@ -4,13 +4,14 @@ import {
   EMAILS_SERVICE,
   RmqModule,
 } from '@app/common';
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import UsersController from './users.controller';
 import UsersRepository from './users.repository';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UsersSchema } from './mongo-schemas';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),

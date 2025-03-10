@@ -2,7 +2,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
-import { AuthConfigs, AuthUser } from '../types';
+import type { AuthConfigs, AuthUser } from '../types';
 
 type SetAuthUserCacheProps = {
   user: AuthUser;
