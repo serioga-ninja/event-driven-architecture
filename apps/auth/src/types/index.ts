@@ -2,7 +2,9 @@ import type { CacheConfig, NODE_ENV } from '@app/common';
 import type { FastifyRequest } from 'fastify';
 import type { Users } from '../../../app/src/users/mongo-schemas';
 
-export type AuthRequest = FastifyRequest & { user: AuthUser };
+export type AuthRequest = FastifyRequest & {
+  user: AuthUser;
+};
 export type LoginRequest = FastifyRequest & { user: ValidateUserReturn };
 export type AuthConfigs = {
   PORT: number;
