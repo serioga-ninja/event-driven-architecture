@@ -31,6 +31,9 @@ export class PostsService {
   }
 
   async getPosts() {
-    return this._postsRepository.findManyBy({});
+    return this._postsRepository.findManyBy({
+      entityStatus: EntityStatus.ACTIVE,
+      visibility: VisibilityLevels.PUBLIC,
+    });
   }
 }

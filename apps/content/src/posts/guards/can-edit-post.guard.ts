@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import PostsRepository from '../posts.repository';
 import { AuthRequest } from '../../../../auth/src/types';
-import { EntityStatus } from '@app/common';
 
 @Injectable()
 export default class CanEditPostGuard implements CanActivate {
@@ -24,12 +23,6 @@ export default class CanEditPostGuard implements CanActivate {
 
     if (!post) {
       throw new ForbiddenException('You are not allowed to edit this post');
-    }
-
-    if (post.entityStatus === EntityStatus.ARCHIVED) {
-      throw new ForbiddenException(
-        'You are not allowed to edit archived this post',
-      );
     }
 
     return true;

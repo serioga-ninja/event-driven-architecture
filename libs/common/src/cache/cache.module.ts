@@ -8,6 +8,7 @@ import * as Keyv from 'keyv';
 @Module({
   imports: [
     CacheModule.registerAsync({
+      isGlobal: true,
       useFactory: (configService: ConfigService<CacheConfig, true>) => {
         return {
           stores: [
