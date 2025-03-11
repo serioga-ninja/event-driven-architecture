@@ -12,8 +12,8 @@ import * as Keyv from 'keyv';
         return {
           stores: [
             new Keyv({
-              ttl: configService.get('CACHE_TTL') || 0,
-              store: new KeyvRedis(configService.get('CACHE_REDIS_URL')),
+              ttl: configService.get('CACHE_TTL') || 30,
+              store: new KeyvRedis(configService.getOrThrow('CACHE_REDIS_URL')),
             }),
           ],
         };

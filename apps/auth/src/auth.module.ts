@@ -40,8 +40,8 @@ import { JwtStrategy, LocalStrategy } from './strategies';
       queue: EMAILS_QUEUE,
     }),
     CacheModule,
-    MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
     GrpcModule,
+    MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
   ],
   controllers: [AuthController],
   providers: [

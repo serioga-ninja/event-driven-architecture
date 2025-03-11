@@ -6,12 +6,23 @@
     "deleteOutDir": true,
     "webpack": true,
     "tsConfigPath": "apps/app/tsconfig.app.json",
-    "assets": ["**/*.proto"],
+    "assets": [
+      "**/*.proto"
+    ],
     "watchAssets": true
   },
   "monorepo": true,
   "root": "apps/app",
   "projects": {
+    "app": {
+      "type": "application",
+      "root": "apps/app",
+      "entryFile": "main",
+      "sourceRoot": "apps/app/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/app/tsconfig.app.json"
+      }
+    },
     "auth": {
       "type": "application",
       "root": "apps/auth",
@@ -30,6 +41,15 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
+    "content": {
+      "type": "application",
+      "root": "apps/content",
+      "entryFile": "main",
+      "sourceRoot": "apps/content/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/content/tsconfig.app.json"
+      }
+    },
     "emails": {
       "type": "application",
       "root": "apps/emails",
@@ -46,15 +66,6 @@
       "sourceRoot": "apps/fallback/src",
       "compilerOptions": {
         "tsConfigPath": "apps/fallback/tsconfig.app.json"
-      }
-    },
-    "app": {
-      "type": "application",
-      "root": "apps/app",
-      "entryFile": "main",
-      "sourceRoot": "apps/app/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/app/tsconfig.app.json"
       }
     }
   }
