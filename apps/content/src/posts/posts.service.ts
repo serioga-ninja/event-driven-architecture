@@ -22,7 +22,7 @@ export class PostsService {
       { _id: body.id, authorId: author._id },
       {
         entityStatus: body.entityStatus,
-        visibility: body.visibility,
+        visibility: body.visibility as VisibilityLevels,
         text: body.text,
       },
     );

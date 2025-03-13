@@ -12,7 +12,7 @@ import CreatePostDto from './dto/create-post.dto';
 import { JwtAuthGuard, TokenPayload } from '@app/common';
 import UpdatePostDto from './dto/update-post.dto';
 import { CanEditPostGuard } from './guards';
-import { CurrentUser } from '../../../auth/src/decorators';
+import { CurrentUser } from '../../../../libs/common/src/auth/decorators';
 import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import { PostsCacheKeys } from '../constant';
 

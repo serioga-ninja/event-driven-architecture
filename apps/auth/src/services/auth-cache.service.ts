@@ -23,7 +23,7 @@ export default class AuthCacheService {
     return this._cacheManager.set(
       this._buildKey(user._id),
       user,
-      this._config.get('JWT_EXPIRATION') * 1000,
+      this._config.get('JWT_EXPIRATION_SEC') * 1000,
     );
   }
 

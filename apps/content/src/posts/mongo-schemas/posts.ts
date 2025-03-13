@@ -34,6 +34,9 @@ export class Posts {
     },
   })
   id: string;
+
+  declare createdAt: Date;
+  declare updatedAt: Date;
 }
 
 export const PostsSchema = SchemaFactory.createForClass(Posts);

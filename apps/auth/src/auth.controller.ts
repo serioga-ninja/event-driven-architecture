@@ -1,7 +1,6 @@
-import { TokenPayload, ValidateUserEvent } from '@app/common';
+import { CurrentUser, TokenPayload, ValidateUserEvent } from '@app/common';
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { GrpcMethod, MessagePattern } from '@nestjs/microservices';
-import { CurrentUser } from './decorators';
 import type { RegisterUserDto } from './dtos';
 import { JwtAuthGuard, LocalAuthGuard } from './guards';
 import { AuthService } from './services';

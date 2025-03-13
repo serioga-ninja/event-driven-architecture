@@ -4,14 +4,16 @@ import { PostsService } from './posts.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Posts, PostsSchema } from './mongo-schemas';
 import PostsRepository from './posts.repository';
-import { AuthModule } from '@app/common';
+import { AuthModule, GraphQLModule } from '@app/common';
+import { PostsResolver } from './graphql';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Posts.name, schema: PostsSchema }]),
     AuthModule,
+    GraphQLModule.register('posts'),
   ],
   controllers: [PostsController],
-  providers: [PostsService, PostsRepository],
+  providers: [PostsService, PostsRepository, PostsResolver],
 })
 export class PostsModule {}

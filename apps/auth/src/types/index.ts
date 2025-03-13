@@ -10,7 +10,7 @@ export type AuthConfigs = {
   PORT: number;
   GRPC_URI: string;
   JWT_SECRET: string;
-  JWT_EXPIRATION: number;
+  JWT_EXPIRATION_SEC: number;
   MONGODB_URI: string;
   RABBIT_MQ_URI: string;
   NODE_ENV: NODE_ENV;

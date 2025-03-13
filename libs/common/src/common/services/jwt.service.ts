@@ -12,7 +12,7 @@ export default class JwtService {
   sign<T extends object>(obj: T): string {
     return this._jwtService.sign(obj, {
       algorithm: 'HS256',
-      expiresIn: this._configService.get('JWT_EXPIRATION_SEC'),
+      expiresIn: this._configService.get('JWT_EXPIRATION_SEC') * 1000,
       secret: this._configService.get('JWT_SECRET'),
     });
   }

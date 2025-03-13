@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserLoggedInEvent } from '../events';
 import LoginUserCommand from './login-user.command';
+import { AuthConfigs } from '../types';
 
 @CommandHandler(LoginUserCommand)
 export default class LoginUserHandler
@@ -12,7 +13,7 @@ export default class LoginUserHandler
   private readonly _logger = new Logger(LoginUserHandler.name);
 
   constructor(
-    private readonly _configService: ConfigService,
+    private readonly _configService: ConfigService<AuthConfigs, true>,
     private readonly _jwtService: JwtService,
     private readonly _eventBus: EventBus,
   ) {}
@@ -24,7 +25,7 @@ export default class LoginUserHandler
 
     const expires = new Date();
     expires.setSeconds(
-      expires.getSeconds() + this._configService.get('JWT_EXPIRATION'),
+      expires.getSeconds() + this._configService.get('JWT_EXPIRATION_SEC'),
     );
 
     const token = this._jwtService.sign(tokenPayload);

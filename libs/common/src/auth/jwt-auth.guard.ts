@@ -11,7 +11,12 @@ import { FastifyRequest } from 'fastify';
 import { catchError, map, Observable, tap } from 'rxjs';
 import { AUTH_SERVICE, GRPC_AUTH_SERVICE } from '../rmq';
 import { ValidateUserEvent } from './events';
-import type { AuthModuleConfig, TokenPayload } from '@app/common';
+import {
+  AuthModuleConfig,
+  getAuthString,
+  getRequest,
+  TokenPayload,
+} from '@app/common';
 import { ConfigService } from '@nestjs/config';
 
 type AuthService = {
@@ -82,15 +87,7 @@ export default class JwtAuthGuard implements CanActivate, OnModuleInit {
   }
 
   private getAuthentication(context: ExecutionContext): string {
-    let authentication: string | null = null;
-
-    if (context.getType() === 'rpc') {
-      authentication = context.switchToRpc().getData().Authentication;
-    } else if (context.getType() === 'http') {
-      authentication =
-        context.switchToHttp().getRequest<FastifyRequest>().headers
-          .authorization || null;
-    }
+    const authentication = getAuthString(context);
 
     if (!authentication) {
       throw new UnauthorizedException(
@@ -102,10 +99,6 @@ export default class JwtAuthGuard implements CanActivate, OnModuleInit {
   }
 
   private addUser(user: TokenPayload, context: ExecutionContext): void {
-    if (context.getType() === 'rpc') {
-      context.switchToRpc().getData().user = user;
-    } else if (context.getType() === 'http') {
-      context.switchToHttp().getRequest<FastifyRequest>().user = user;
-    }
+    getRequest(context).user = user;
   }
 }

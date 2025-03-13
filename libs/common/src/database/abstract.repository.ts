@@ -1,91 +1,58 @@
-import { Logger, NotFoundException } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type {
-  AnyKeys,
-  Connection,
-  Model,
-  RootFilterQuery,
-  UpdateQuery,
-} from 'mongoose';
+  CreateOptions,
+  FindManyOptions,
+  FindOneOptions,
+  FindOptions,
+  GetListPagedQuery,
+  GetListPagedResult,
+  UpdateOptions,
+} from '@app/common';
+import { Logger, NotImplementedException } from '@nestjs/common';
 
-type FindOneOptions<T> = {
-  select?: (keyof T)[];
-};
+export default class AbstractRepository<Entity> {
+  protected readonly logger = new Logger(this.constructor.name);
 
-type FindManyOptions<T> = {
-  select?: (keyof T)[];
-  limit?: number;
-};
-
-export default abstract class AbstractRepository<Entity> {
-  protected readonly logger: Logger;
-
-  constructor(
-    protected readonly model: Model<Entity>,
-    protected readonly connection: Connection,
-  ) {
-    this.logger = new Logger(this.constructor.name);
-  }
-
-  updateOneBy(where: UpdateQuery<Entity>, data: AnyKeys<Entity>) {
-    return this.model.updateOne(where, data);
+  updateOneBy(
+    _where: FindOptions<Entity>,
+    _data: UpdateOptions<Entity>,
+  ): Promise<Entity | null> {
+    throw new NotImplementedException('Method not implemented');
   }
 
   findOneBy(
-    query: RootFilterQuery<Entity>,
-    options: FindOneOptions<Entity> = {},
-  ) {
-    const qb = this.model.findOne(query);
-
-    if (options.select) {
-      qb.select(options.select as string[]);
-    }
-
-    return qb.exec();
+    _query: FindOptions<Entity>,
+    _options: FindOneOptions<Entity>,
+  ): Promise<Entity | null> {
+    throw new NotImplementedException('Method not implemented');
   }
 
   findManyBy(
-    query: RootFilterQuery<Entity>,
-    options: FindManyOptions<Entity> = {},
-  ) {
-    const qb = this.model.find(query);
-
-    if (options.select) {
-      qb.select(options.select as string[]);
-    }
-
-    if (options.limit) {
-      qb.limit(options.limit);
-    }
-
-    return qb.exec();
+    _query: FindOptions<Entity>,
+    _options: FindManyOptions<Entity>,
+  ): Promise<Entity[]> {
+    throw new NotImplementedException('Method not implemented');
   }
 
-  findOneById(id: string) {
-    return this.model.findById(id);
+  findManyPaged(
+    _query: GetListPagedQuery<Entity>,
+  ): Promise<GetListPagedResult<Entity>> {
+    throw new NotImplementedException('Method not implemented');
   }
 
-  async findOneByOrThrow(query: RootFilterQuery<Entity>) {
-    const model = await this.model.findOne(query);
-
-    if (!model) {
-      throw new NotFoundException('Model not found');
-    }
-
-    return model;
+  findOneById(_id: string): Promise<Entity | null> {
+    throw new NotImplementedException('Method not implemented');
   }
 
-  create(data: AnyKeys<Entity>) {
-    return this.model.create(data);
+  findOneByOrThrow(_query: FindOptions<Entity>): Promise<Entity> {
+    throw new NotImplementedException('Method not implemented');
   }
 
-  deleteById(id: string) {
-    return this.model.findByIdAndDelete(id);
+  create(_data: CreateOptions<Entity>): Promise<Entity> {
+    throw new NotImplementedException('Method not implemented');
   }
 
-  // async startTransaction() {
-  //   const session = await this.connection.startSession();
-  //   session.startTransaction();
-
-  //   return session;
-  // }
+  deleteById(_id: string): Promise<string> {
+    throw new NotImplementedException('Method not implemented');
+  }
 }
