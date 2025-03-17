@@ -3,7 +3,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import type { Users } from '../../../app/src/users/mongo-schemas';
 import type { RegisterUserDto } from '../dtos';
 import UserRegisteredEvent from '../events/user-registered.event';
-import { AuthRepository } from '../repositories';
+import { MongoAuthRepository } from '../repositories';
 import PasswordService from '../services/passwords.service';
 import RegisterUserCommand from './register-user.command';
 
@@ -14,7 +14,7 @@ export default class RegisterUserHandler
   private readonly _logger = new Logger(RegisterUserHandler.name);
 
   constructor(
-    private readonly _authRepository: AuthRepository,
+    private readonly _authRepository: MongoAuthRepository,
     private readonly _passwordService: PasswordService,
     private readonly _eventBus: EventBus,
   ) {}

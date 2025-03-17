@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import PostsRepository from './posts.repository';
+import MongoPostsRepository from './repositories/mongo-posts.repository';
 import { CreatePostDto } from './dto';
 import { EntityStatus, VisibilityLevels, TokenPayload } from '@app/common';
 import UpdatePostDto from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly _postsRepository: PostsRepository) {}
+  constructor(private readonly _postsRepository: MongoPostsRepository) {}
 
   createPost(data: CreatePostDto, author: TokenPayload) {
     return this._postsRepository.create({

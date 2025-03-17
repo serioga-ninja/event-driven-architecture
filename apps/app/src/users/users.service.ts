@@ -10,14 +10,14 @@ import { lastValueFrom } from 'rxjs';
 import { CreateUserDto } from './dtos';
 import { CreateUserEvent } from './events';
 import { Users } from './mongo-schemas';
-import UsersRepository from './users.repository';
+import MongoUsersRepository from './repositories/mongo-users.repository';
 
 @Injectable()
 export class UsersService {
   private readonly _logger = new Logger(UsersService.name);
 
   constructor(
-    private readonly usersRepository: UsersRepository,
+    private readonly usersRepository: MongoUsersRepository,
     @Inject(EMAILS_SERVICE) private readonly emailsService: ClientProxy,
   ) {}
 

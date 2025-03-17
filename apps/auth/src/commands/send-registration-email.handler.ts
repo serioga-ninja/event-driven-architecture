@@ -3,7 +3,7 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ClientProxy } from '@nestjs/microservices';
 import SendEmailEvent from '../../../emails/src/events/send-email.event';
-import { AuthRepository } from '../repositories';
+import { MongoAuthRepository } from '../repositories';
 import SendRegistrationEmailCommand from './send-registration-email.command';
 
 @CommandHandler(SendRegistrationEmailCommand)
@@ -12,7 +12,7 @@ export default class SendRegistrationEmailHandler
 {
   constructor(
     @Inject(EMAILS_SERVICE) private readonly _emailsService: ClientProxy,
-    private readonly _authRepository: AuthRepository,
+    private readonly _authRepository: MongoAuthRepository,
   ) {}
 
   async execute({ id }: SendRegistrationEmailCommand) {

@@ -9,6 +9,7 @@ import {
 import { contentConfigSchema } from './schemas';
 import { PostsModule } from './posts/posts.module';
 import { RouterModule } from '@nestjs/core';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -22,11 +23,16 @@ import { RouterModule } from '@nestjs/core';
     CacheModule,
     GrpcModule,
     PostsModule,
+    CommentsModule,
 
     RouterModule.register([
       {
         path: 'posts',
         module: PostsModule,
+      },
+      {
+        path: 'comments',
+        module: CommentsModule,
       },
     ]),
   ],

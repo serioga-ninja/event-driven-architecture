@@ -4,12 +4,12 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import PostsRepository from '../posts.repository';
+import MongoPostsRepository from '../repositories/mongo-posts.repository';
 import { AuthRequest } from '../../../../auth/src/types';
 
 @Injectable()
 export default class CanEditPostGuard implements CanActivate {
-  constructor(private readonly _postsRepository: PostsRepository) {}
+  constructor(private readonly _postsRepository: MongoPostsRepository) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthRequest>();

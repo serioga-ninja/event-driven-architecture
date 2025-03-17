@@ -26,7 +26,8 @@ model Users {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  Posts Posts[]
+  Posts    Posts[]
+  Comments Comments[]
 }
 
 model Posts {
@@ -39,4 +40,20 @@ model Posts {
 
   user    Users?  @relation(fields: [usersId], references: [id])
   usersId String?
+
+  Comments Comments[]
+}
+
+model Comments {
+  id           String   @id @default(uuid())
+  content      String   @db.Text()
+  entityStatus String   @db.VarChar()
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user    Users?  @relation(fields: [usersId], references: [id])
+  usersId String?
+
+  post    Posts?  @relation(fields: [postsId], references: [id])
+  postsId String?
 }

@@ -6,7 +6,7 @@ import {
 } from '@app/common';
 import { Global, Module } from '@nestjs/common';
 import UsersController from './users.controller';
-import UsersRepository from './users.repository';
+import MongoUsersRepository from './repositories/mongo-users.repository';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UsersSchema } from './mongo-schemas';
@@ -22,7 +22,7 @@ import { Users, UsersSchema } from './mongo-schemas';
     AuthModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository],
-  exports: [UsersRepository, UsersService],
+  providers: [UsersService, MongoUsersRepository],
+  exports: [MongoUsersRepository, UsersService],
 })
 export class UsersModule {}

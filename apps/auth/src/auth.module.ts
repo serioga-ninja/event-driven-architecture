@@ -19,7 +19,7 @@ import {
   ResetAuthUserCacheHandler,
   SendRegistrationEmailHandler,
 } from './commands';
-import { AuthRepository } from './repositories';
+import { MongoAuthRepository } from './repositories';
 import { authConfigSchema } from './schemas';
 import { AuthSaga, AuthService, PasswordService } from './services';
 import AuthCacheService from './services/auth-cache.service';
@@ -51,7 +51,7 @@ import { JwtStrategy, LocalStrategy } from './strategies';
     PasswordService,
     LocalStrategy,
     JwtStrategy,
-    AuthRepository,
+    MongoAuthRepository,
     RegisterUserHandler,
     SendRegistrationEmailHandler,
     LoginUserHandler,

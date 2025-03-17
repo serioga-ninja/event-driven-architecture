@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 import { LoginUserCommand, RegisterUserCommand } from '../commands';
 import type { RegisterUserDto } from '../dtos';
 import { UserLoggedOutEvent } from '../events';
-import { AuthRepository } from '../repositories';
+import { MongoAuthRepository } from '../repositories';
 import { AuthUser, ValidateUserReturn } from '../types';
 import AuthCacheService from './auth-cache.service';
 import PasswordService from './passwords.service';
@@ -14,7 +14,7 @@ import { authenticator } from 'otplib';
 @Injectable()
 export default class AuthService {
   constructor(
-    private readonly _authRepository: AuthRepository,
+    private readonly _authRepository: MongoAuthRepository,
     private readonly _passwordService: PasswordService,
     private readonly _commandBus: CommandBus,
     private readonly _authCacheService: AuthCacheService,

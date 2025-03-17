@@ -4,9 +4,7 @@ export type FindOneOptions<Entity> = {
 export type FindManyOptions<Entity> = FindOneOptions<Entity> & {
   limit?: number;
 };
-export type FindOptions<Entity> = {
-  [Key in keyof Entity]?: Entity[Key];
-} & Record<string, any>;
+export type FindOptions<Entity> = Partial<Entity> | any;
 export type UpdateOptions<Entity> = Partial<Entity>;
 export type CreateOptions<Entity> = Partial<Entity>;
 export type GetListPagedQuery<Entity> = {

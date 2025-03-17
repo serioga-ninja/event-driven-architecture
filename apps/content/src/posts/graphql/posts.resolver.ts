@@ -6,7 +6,7 @@ import {
   PostsCreateInput,
   PostsUpdateInput,
 } from './models';
-import PostsRepository from '../posts.repository';
+import MongoPostsRepository from '../repositories/mongo-posts.repository';
 import { GraphQLResolveInfo } from 'graphql/type';
 import {
   JwtAuthGuard,
@@ -18,7 +18,7 @@ import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => PostsModel)
 export default class PostsResolver {
-  constructor(private readonly _postsRepository: PostsRepository) {}
+  constructor(private readonly _postsRepository: MongoPostsRepository) {}
 
   @Query(() => PostsModel)
   handleGetPost(@Args('id') id: string, @Info() info: GraphQLResolveInfo) {
