@@ -34,7 +34,7 @@ export class CommentsResolver {
   ) {
     return this.commentsService.create({
       ...createCommentInput.data,
-      usersId: user._id,
+      usersId: user.id,
     } as any);
   }
 

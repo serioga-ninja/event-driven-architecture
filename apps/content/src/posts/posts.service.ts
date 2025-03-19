@@ -1,39 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import MongoPostsRepository from './repositories/mongo-posts.repository';
-import { CreatePostDto } from './dto';
-import { EntityStatus, VisibilityLevels, TokenPayload } from '@app/common';
-import UpdatePostDto from './dto/update-post.dto';
+import {
+  type CreateOptions,
+  EntityStatus,
+  type FindManyOptions,
+  FindOptions,
+  PrismaService,
+  VisibilityLevels,
+} from '@app/common';
+import { PrismaRepository } from '@app/common/database/prisma.repository';
+import { Posts } from '@prisma/client';
 
 @Injectable()
-export class PostsService {
-  constructor(private readonly _postsRepository: MongoPostsRepository) {}
+export class PostsService extends PrismaRepository<Posts> {
+  constructor(prisma: PrismaService) {
+    super(prisma, 'posts');
+  }
 
-  createPost(data: CreatePostDto, author: TokenPayload) {
-    return this._postsRepository.create({
-      authorId: author._id,
-      text: data.text,
+  create(data: CreateOptions<Posts>) {
+    return super.create({
+      usersId: data.usersId,
+      content: data.content,
       entityStatus: EntityStatus.DRAFT,
       visibility: VisibilityLevels.PRIVATE,
     });
   }
 
-  async updatePost(body: UpdatePostDto, author: TokenPayload) {
-    await this._postsRepository.updateOneBy(
-      { _id: body.id, authorId: author._id },
+  async findManyBy(
+    where: FindOptions<Posts> = {},
+    options: FindManyOptions<Posts> = {},
+  ) {
+    return super.findManyBy(
       {
-        entityStatus: body.entityStatus,
-        visibility: body.visibility as VisibilityLevels,
-        text: body.text,
+        entityStatus: EntityStatus.ACTIVE,
+        visibility: VisibilityLevels.PUBLIC,
+        ...where,
       },
+      options,
     );
-
-    return this._postsRepository.findOneById(body.id);
-  }
-
-  async getPosts() {
-    return this._postsRepository.findManyBy({
-      entityStatus: EntityStatus.ACTIVE,
-      visibility: VisibilityLevels.PUBLIC,
-    });
   }
 }

@@ -2,9 +2,6 @@ import type { CacheConfig, NODE_ENV } from '@app/common';
 import type { FastifyRequest } from 'fastify';
 import type { Users } from '../../../app/src/users/mongo-schemas';
 
-export type AuthRequest = FastifyRequest & {
-  user: AuthUser;
-};
 export type LoginRequest = FastifyRequest & { user: ValidateUserReturn };
 export type AuthConfigs = {
   PORT: number;
@@ -15,8 +12,11 @@ export type AuthConfigs = {
   RABBIT_MQ_URI: string;
   NODE_ENV: NODE_ENV;
 } & CacheConfig;
-export type AuthUser = Pick<Users, '_id' | 'email'>;
+export type AuthUser = {
+  id: string;
+  email: string;
+};
 export type ValidateUserReturn = Pick<
   Users,
-  '_id' | 'email' | 'isTfaEnabled' | 'tfaSecret'
+  'id' | 'email' | 'isTfaEnabled' | 'tfaSecret'
 >;

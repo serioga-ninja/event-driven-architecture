@@ -12,7 +12,7 @@ import CreatePostDto from './dto/create-post.dto';
 import { JwtAuthGuard, TokenPayload } from '@app/common';
 import UpdatePostDto from './dto/update-post.dto';
 import { CanEditPostGuard } from './guards';
-import { CurrentUser } from '../../../../libs/common/src/auth/decorators';
+import { CurrentUser } from '@app/common';
 import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import { PostsCacheKeys } from '../constant';
 
@@ -27,7 +27,10 @@ export class PostsController {
     @Body() body: CreatePostDto,
     @CurrentUser() user: TokenPayload,
   ) {
-    return this._postsService.createPost(body, user);
+    return this._postsService.create({
+      ...body,
+      usersId: user.id,
+    });
   }
 
   @Put()
@@ -36,13 +39,19 @@ export class PostsController {
     @Body() body: UpdatePostDto,
     @CurrentUser() user: TokenPayload,
   ) {
-    return this._postsService.updatePost(body, user);
+    return this._postsService.updateOneBy(
+      { id: body.id },
+      {
+        ...body,
+        usersId: user.id,
+      },
+    );
   }
 
   @Get()
   @CacheKey(PostsCacheKeys.LatestPosts)
   @CacheTTL(600000)
   handleGetPosts() {
-    return this._postsService.getPosts();
+    return this._postsService.findManyBy();
   }
 }

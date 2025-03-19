@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, Virtual } from '@nestjs/mongoose';
 import type { HydratedDocument } from 'mongoose';
 
 export type UsersDocument = HydratedDocument<Users>;
@@ -35,6 +35,13 @@ export class Users {
 
   @Prop({ required: false, default: null, select: false })
   tfaSecret: string;
+
+  @Virtual({
+    get: function (this: Users) {
+      return this._id;
+    },
+  })
+  id: string;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);

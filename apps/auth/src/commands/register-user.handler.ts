@@ -26,10 +26,10 @@ export default class RegisterUserHandler
       createUserRequest.password,
     );
     const user = await this._authRepository.create(createUserRequest);
-    this._eventBus.publish(new UserRegisteredEvent(user._id, user.email));
+    this._eventBus.publish(new UserRegisteredEvent(user.id, user.email));
 
     return {
-      id: user._id,
+      id: user.id,
       email: user.email,
     };
   }

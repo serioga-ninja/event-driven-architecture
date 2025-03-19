@@ -1,5 +1,5 @@
 export type FindOneOptions<Entity> = {
-  select?: (keyof Entity)[];
+  select?: Partial<Record<keyof Entity, boolean>>;
 };
 export type FindManyOptions<Entity> = FindOneOptions<Entity> & {
   limit?: number;

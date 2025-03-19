@@ -35,7 +35,7 @@ export class PrismaRepository<T> extends AbstractRepository<T> {
 
   findOneBy(
     where: FindOptions<T>,
-    options: FindOneOptions<T>,
+    options: FindOneOptions<T> = {},
   ): Promise<T | null> {
     return this.delegate.findFirst({
       where,

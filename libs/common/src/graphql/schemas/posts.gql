@@ -89,15 +89,91 @@ type Comments {
   post: Posts!
 }
 
+type PostsCountAggregate {
+  id: Int!
+  content: Int!
+  visibility: Int!
+  entityStatus: Int!
+  createdAt: Int!
+  updatedAt: Int!
+  usersId: Int!
+  _all: Int!
+}
+
+type PostsMinAggregate {
+  id: String
+  content: String
+  visibility: String
+  entityStatus: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  usersId: String
+}
+
+type PostsMaxAggregate {
+  id: String
+  content: String
+  visibility: String
+  entityStatus: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  usersId: String
+}
+
+type UsersCountAggregate {
+  id: Int!
+  email: Int!
+  phone: Int!
+  firstName: Int!
+  lastName: Int!
+  isTfaEnabled: Int!
+  tfaSecret: Int!
+  entityStatus: Int!
+  password: Int!
+  createdAt: Int!
+  updatedAt: Int!
+  _all: Int!
+}
+
+type UsersMinAggregate {
+  id: String
+  email: String
+  phone: String
+  firstName: String
+  lastName: String
+  isTfaEnabled: Boolean
+  tfaSecret: String
+  entityStatus: String
+  password: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type UsersMaxAggregate {
+  id: String
+  email: String
+  phone: String
+  firstName: String
+  lastName: String
+  isTfaEnabled: Boolean
+  tfaSecret: String
+  entityStatus: String
+  password: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type PostsModel {
-  _id: String!
-  id: String!
-  text: String!
+  id: ID!
+  content: String!
   visibility: String!
   entityStatus: String!
-  authorId: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  usersId: String
+  user: Users
+  Comments: [Comments!]
+  _count: PostsCount!
 }
 
 type PostsPaginatedResultModel {
@@ -406,47 +482,154 @@ enum CommentsScalarFieldEnum {
 }
 
 type Mutation {
-  handleCreatePost(createPost: PostsCreateInput!): PostsModel!
-  handleUpdatePost(updatePost: PostsUpdateInput!): PostsModel!
+  handleCreatePost(data: PostsCreateInput!): PostsModel!
+  handleUpdatePost(data: PostsUpdateInput!, where: PostsWhereUniqueInput!): PostsModel!
   createComment(data: CommentsCreateInput!): CommentsModel!
   updateComment(updateCommentInput: CommentsUpdateInput!): CommentsModel!
   removeComment(id: String!): CommentsModel!
 }
 
 input PostsCreateInput {
-  text: String
+  id: String
+  content: String!
   visibility: String
-  entityStatus: String
+  entityStatus: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  user: UsersCreateNestedOneWithoutPostsInput
+  Comments: CommentsCreateNestedManyWithoutPostInput
 }
 
-input PostsUpdateInput {
-  id: String!
-  text: String
-  visibility: VisibilityLevels
-  entityStatus: EntityStatus
+input UsersCreateNestedOneWithoutPostsInput {
+  create: UsersCreateWithoutPostsInput
+  connectOrCreate: UsersCreateOrConnectWithoutPostsInput
+  connect: UsersWhereUniqueInput
 }
 
-enum VisibilityLevels {
-  PUBLIC
-  PRIVATE
+input UsersCreateWithoutPostsInput {
+  id: String
+  email: String!
+  phone: String
+  firstName: String
+  lastName: String
+  isTfaEnabled: Boolean
+  tfaSecret: String
+  entityStatus: String!
+  password: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  Comments: CommentsCreateNestedManyWithoutUserInput
 }
 
-"""The status of the entity"""
-enum EntityStatus {
-  ACTIVE
-  INACTIVE
-  ARCHIVED
-  DRAFT
+input CommentsCreateNestedManyWithoutUserInput {
+  create: [CommentsCreateWithoutUserInput!]
+  connectOrCreate: [CommentsCreateOrConnectWithoutUserInput!]
+  createMany: CommentsCreateManyUserInputEnvelope
+  connect: [CommentsWhereUniqueInput!]
 }
 
-input CommentsCreateInput {
+input CommentsCreateWithoutUserInput {
+  id: String
+  content: String!
+  entityStatus: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  post: PostsCreateNestedOneWithoutCommentsInput!
+}
+
+input PostsCreateNestedOneWithoutCommentsInput {
+  create: PostsCreateWithoutCommentsInput
+  connectOrCreate: PostsCreateOrConnectWithoutCommentsInput
+  connect: PostsWhereUniqueInput
+}
+
+input PostsCreateWithoutCommentsInput {
+  id: String
+  content: String!
+  visibility: String
+  entityStatus: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  user: UsersCreateNestedOneWithoutPostsInput
+}
+
+input PostsCreateOrConnectWithoutCommentsInput {
+  where: PostsWhereUniqueInput!
+  create: PostsCreateWithoutCommentsInput!
+}
+
+input PostsWhereUniqueInput {
+  id: String
+  AND: [PostsWhereInput!]
+  OR: [PostsWhereInput!]
+  NOT: [PostsWhereInput!]
+  content: StringFilter
+  visibility: StringFilter
+  entityStatus: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  usersId: StringNullableFilter
+  user: UsersNullableScalarRelationFilter
+  Comments: CommentsListRelationFilter
+}
+
+input CommentsCreateOrConnectWithoutUserInput {
+  where: CommentsWhereUniqueInput!
+  create: CommentsCreateWithoutUserInput!
+}
+
+input CommentsCreateManyUserInputEnvelope {
+  data: [CommentsCreateManyUserInput!]!
+  skipDuplicates: Boolean
+}
+
+input CommentsCreateManyUserInput {
+  id: String
+  content: String!
+  entityStatus: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  postsId: String!
+}
+
+input UsersCreateOrConnectWithoutPostsInput {
+  where: UsersWhereUniqueInput!
+  create: UsersCreateWithoutPostsInput!
+}
+
+input UsersWhereUniqueInput {
+  id: String
+  email: String
+  AND: [UsersWhereInput!]
+  OR: [UsersWhereInput!]
+  NOT: [UsersWhereInput!]
+  phone: StringFilter
+  firstName: StringFilter
+  lastName: StringFilter
+  isTfaEnabled: BoolFilter
+  tfaSecret: StringNullableFilter
+  entityStatus: StringFilter
+  password: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  Posts: PostsListRelationFilter
+  Comments: CommentsListRelationFilter
+}
+
+input CommentsCreateNestedManyWithoutPostInput {
+  create: [CommentsCreateWithoutPostInput!]
+  connectOrCreate: [CommentsCreateOrConnectWithoutPostInput!]
+  createMany: CommentsCreateManyPostInputEnvelope
+  connect: [CommentsWhereUniqueInput!]
+}
+
+input CommentsCreateWithoutPostInput {
   id: String
   content: String!
   entityStatus: String!
   createdAt: DateTime
   updatedAt: DateTime
   user: UsersCreateNestedOneWithoutCommentsInput!
-  post: PostsCreateNestedOneWithoutCommentsInput!
 }
 
 input UsersCreateNestedOneWithoutCommentsInput {
@@ -487,59 +670,9 @@ input PostsCreateWithoutUserInput {
   Comments: CommentsCreateNestedManyWithoutPostInput
 }
 
-input CommentsCreateNestedManyWithoutPostInput {
-  create: [CommentsCreateWithoutPostInput!]
-  connectOrCreate: [CommentsCreateOrConnectWithoutPostInput!]
-  createMany: CommentsCreateManyPostInputEnvelope
-  connect: [CommentsWhereUniqueInput!]
-}
-
-input CommentsCreateWithoutPostInput {
-  id: String
-  content: String!
-  entityStatus: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-  user: UsersCreateNestedOneWithoutCommentsInput!
-}
-
-input CommentsCreateOrConnectWithoutPostInput {
-  where: CommentsWhereUniqueInput!
-  create: CommentsCreateWithoutPostInput!
-}
-
-input CommentsCreateManyPostInputEnvelope {
-  data: [CommentsCreateManyPostInput!]!
-  skipDuplicates: Boolean
-}
-
-input CommentsCreateManyPostInput {
-  id: String
-  content: String!
-  entityStatus: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-  usersId: String!
-}
-
 input PostsCreateOrConnectWithoutUserInput {
   where: PostsWhereUniqueInput!
   create: PostsCreateWithoutUserInput!
-}
-
-input PostsWhereUniqueInput {
-  id: String
-  AND: [PostsWhereInput!]
-  OR: [PostsWhereInput!]
-  NOT: [PostsWhereInput!]
-  content: StringFilter
-  visibility: StringFilter
-  entityStatus: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  usersId: StringNullableFilter
-  user: UsersNullableScalarRelationFilter
-  Comments: CommentsListRelationFilter
 }
 
 input PostsCreateManyUserInputEnvelope {
@@ -561,115 +694,34 @@ input UsersCreateOrConnectWithoutCommentsInput {
   create: UsersCreateWithoutCommentsInput!
 }
 
-input UsersWhereUniqueInput {
-  id: String
-  email: String
-  AND: [UsersWhereInput!]
-  OR: [UsersWhereInput!]
-  NOT: [UsersWhereInput!]
-  phone: StringFilter
-  firstName: StringFilter
-  lastName: StringFilter
-  isTfaEnabled: BoolFilter
-  tfaSecret: StringNullableFilter
-  entityStatus: StringFilter
-  password: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  Posts: PostsListRelationFilter
-  Comments: CommentsListRelationFilter
-}
-
-input PostsCreateNestedOneWithoutCommentsInput {
-  create: PostsCreateWithoutCommentsInput
-  connectOrCreate: PostsCreateOrConnectWithoutCommentsInput
-  connect: PostsWhereUniqueInput
-}
-
-input PostsCreateWithoutCommentsInput {
-  id: String
-  content: String!
-  visibility: String
-  entityStatus: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-  user: UsersCreateNestedOneWithoutPostsInput
-}
-
-input UsersCreateNestedOneWithoutPostsInput {
-  create: UsersCreateWithoutPostsInput
-  connectOrCreate: UsersCreateOrConnectWithoutPostsInput
-  connect: UsersWhereUniqueInput
-}
-
-input UsersCreateWithoutPostsInput {
-  id: String
-  email: String!
-  phone: String
-  firstName: String
-  lastName: String
-  isTfaEnabled: Boolean
-  tfaSecret: String
-  entityStatus: String!
-  password: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-  Comments: CommentsCreateNestedManyWithoutUserInput
-}
-
-input CommentsCreateNestedManyWithoutUserInput {
-  create: [CommentsCreateWithoutUserInput!]
-  connectOrCreate: [CommentsCreateOrConnectWithoutUserInput!]
-  createMany: CommentsCreateManyUserInputEnvelope
-  connect: [CommentsWhereUniqueInput!]
-}
-
-input CommentsCreateWithoutUserInput {
-  id: String
-  content: String!
-  entityStatus: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-  post: PostsCreateNestedOneWithoutCommentsInput!
-}
-
-input CommentsCreateOrConnectWithoutUserInput {
+input CommentsCreateOrConnectWithoutPostInput {
   where: CommentsWhereUniqueInput!
-  create: CommentsCreateWithoutUserInput!
+  create: CommentsCreateWithoutPostInput!
 }
 
-input CommentsCreateManyUserInputEnvelope {
-  data: [CommentsCreateManyUserInput!]!
+input CommentsCreateManyPostInputEnvelope {
+  data: [CommentsCreateManyPostInput!]!
   skipDuplicates: Boolean
 }
 
-input CommentsCreateManyUserInput {
+input CommentsCreateManyPostInput {
   id: String
   content: String!
   entityStatus: String!
   createdAt: DateTime
   updatedAt: DateTime
-  postsId: String!
+  usersId: String!
 }
 
-input UsersCreateOrConnectWithoutPostsInput {
-  where: UsersWhereUniqueInput!
-  create: UsersCreateWithoutPostsInput!
-}
-
-input PostsCreateOrConnectWithoutCommentsInput {
-  where: PostsWhereUniqueInput!
-  create: PostsCreateWithoutCommentsInput!
-}
-
-input CommentsUpdateInput {
+input PostsUpdateInput {
   id: StringFieldUpdateOperationsInput
   content: StringFieldUpdateOperationsInput
+  visibility: StringFieldUpdateOperationsInput
   entityStatus: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  user: UsersUpdateOneRequiredWithoutCommentsNestedInput
-  post: PostsUpdateOneRequiredWithoutCommentsNestedInput
+  user: UsersUpdateOneWithoutPostsNestedInput
+  Comments: CommentsUpdateManyWithoutPostNestedInput
 }
 
 input StringFieldUpdateOperationsInput {
@@ -680,21 +732,23 @@ input DateTimeFieldUpdateOperationsInput {
   set: DateTime
 }
 
-input UsersUpdateOneRequiredWithoutCommentsNestedInput {
-  create: UsersCreateWithoutCommentsInput
-  connectOrCreate: UsersCreateOrConnectWithoutCommentsInput
-  upsert: UsersUpsertWithoutCommentsInput
+input UsersUpdateOneWithoutPostsNestedInput {
+  create: UsersCreateWithoutPostsInput
+  connectOrCreate: UsersCreateOrConnectWithoutPostsInput
+  upsert: UsersUpsertWithoutPostsInput
+  disconnect: UsersWhereInput
+  delete: UsersWhereInput
   connect: UsersWhereUniqueInput
-  update: UsersUpdateToOneWithWhereWithoutCommentsInput
+  update: UsersUpdateToOneWithWhereWithoutPostsInput
 }
 
-input UsersUpsertWithoutCommentsInput {
-  update: UsersUpdateWithoutCommentsInput!
-  create: UsersCreateWithoutCommentsInput!
+input UsersUpsertWithoutPostsInput {
+  update: UsersUpdateWithoutPostsInput!
+  create: UsersCreateWithoutPostsInput!
   where: UsersWhereInput
 }
 
-input UsersUpdateWithoutCommentsInput {
+input UsersUpdateWithoutPostsInput {
   id: StringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
   phone: StringFieldUpdateOperationsInput
@@ -706,7 +760,7 @@ input UsersUpdateWithoutCommentsInput {
   password: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  Posts: PostsUpdateManyWithoutUserNestedInput
+  Comments: CommentsUpdateManyWithoutUserNestedInput
 }
 
 input BoolFieldUpdateOperationsInput {
@@ -717,34 +771,98 @@ input NullableStringFieldUpdateOperationsInput {
   set: String
 }
 
-input PostsUpdateManyWithoutUserNestedInput {
-  create: [PostsCreateWithoutUserInput!]
-  connectOrCreate: [PostsCreateOrConnectWithoutUserInput!]
-  upsert: [PostsUpsertWithWhereUniqueWithoutUserInput!]
-  createMany: PostsCreateManyUserInputEnvelope
-  set: [PostsWhereUniqueInput!]
-  disconnect: [PostsWhereUniqueInput!]
-  delete: [PostsWhereUniqueInput!]
-  connect: [PostsWhereUniqueInput!]
-  update: [PostsUpdateWithWhereUniqueWithoutUserInput!]
-  updateMany: [PostsUpdateManyWithWhereWithoutUserInput!]
-  deleteMany: [PostsScalarWhereInput!]
+input CommentsUpdateManyWithoutUserNestedInput {
+  create: [CommentsCreateWithoutUserInput!]
+  connectOrCreate: [CommentsCreateOrConnectWithoutUserInput!]
+  upsert: [CommentsUpsertWithWhereUniqueWithoutUserInput!]
+  createMany: CommentsCreateManyUserInputEnvelope
+  set: [CommentsWhereUniqueInput!]
+  disconnect: [CommentsWhereUniqueInput!]
+  delete: [CommentsWhereUniqueInput!]
+  connect: [CommentsWhereUniqueInput!]
+  update: [CommentsUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [CommentsUpdateManyWithWhereWithoutUserInput!]
+  deleteMany: [CommentsScalarWhereInput!]
 }
 
-input PostsUpsertWithWhereUniqueWithoutUserInput {
-  where: PostsWhereUniqueInput!
-  update: PostsUpdateWithoutUserInput!
-  create: PostsCreateWithoutUserInput!
+input CommentsUpsertWithWhereUniqueWithoutUserInput {
+  where: CommentsWhereUniqueInput!
+  update: CommentsUpdateWithoutUserInput!
+  create: CommentsCreateWithoutUserInput!
 }
 
-input PostsUpdateWithoutUserInput {
+input CommentsUpdateWithoutUserInput {
+  id: StringFieldUpdateOperationsInput
+  content: StringFieldUpdateOperationsInput
+  entityStatus: StringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  post: PostsUpdateOneRequiredWithoutCommentsNestedInput
+}
+
+input PostsUpdateOneRequiredWithoutCommentsNestedInput {
+  create: PostsCreateWithoutCommentsInput
+  connectOrCreate: PostsCreateOrConnectWithoutCommentsInput
+  upsert: PostsUpsertWithoutCommentsInput
+  connect: PostsWhereUniqueInput
+  update: PostsUpdateToOneWithWhereWithoutCommentsInput
+}
+
+input PostsUpsertWithoutCommentsInput {
+  update: PostsUpdateWithoutCommentsInput!
+  create: PostsCreateWithoutCommentsInput!
+  where: PostsWhereInput
+}
+
+input PostsUpdateWithoutCommentsInput {
   id: StringFieldUpdateOperationsInput
   content: StringFieldUpdateOperationsInput
   visibility: StringFieldUpdateOperationsInput
   entityStatus: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  Comments: CommentsUpdateManyWithoutPostNestedInput
+  user: UsersUpdateOneWithoutPostsNestedInput
+}
+
+input PostsUpdateToOneWithWhereWithoutCommentsInput {
+  where: PostsWhereInput
+  data: PostsUpdateWithoutCommentsInput!
+}
+
+input CommentsUpdateWithWhereUniqueWithoutUserInput {
+  where: CommentsWhereUniqueInput!
+  data: CommentsUpdateWithoutUserInput!
+}
+
+input CommentsUpdateManyWithWhereWithoutUserInput {
+  where: CommentsScalarWhereInput!
+  data: CommentsUpdateManyMutationInput!
+}
+
+input CommentsScalarWhereInput {
+  AND: [CommentsScalarWhereInput!]
+  OR: [CommentsScalarWhereInput!]
+  NOT: [CommentsScalarWhereInput!]
+  id: StringFilter
+  content: StringFilter
+  entityStatus: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  usersId: StringFilter
+  postsId: StringFilter
+}
+
+input CommentsUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  content: StringFieldUpdateOperationsInput
+  entityStatus: StringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input UsersUpdateToOneWithWhereWithoutPostsInput {
+  where: UsersWhereInput
+  data: UsersUpdateWithoutPostsInput!
 }
 
 input CommentsUpdateManyWithoutPostNestedInput {
@@ -776,35 +894,63 @@ input CommentsUpdateWithoutPostInput {
   user: UsersUpdateOneRequiredWithoutCommentsNestedInput
 }
 
-input CommentsUpdateWithWhereUniqueWithoutPostInput {
-  where: CommentsWhereUniqueInput!
-  data: CommentsUpdateWithoutPostInput!
+input UsersUpdateOneRequiredWithoutCommentsNestedInput {
+  create: UsersCreateWithoutCommentsInput
+  connectOrCreate: UsersCreateOrConnectWithoutCommentsInput
+  upsert: UsersUpsertWithoutCommentsInput
+  connect: UsersWhereUniqueInput
+  update: UsersUpdateToOneWithWhereWithoutCommentsInput
 }
 
-input CommentsUpdateManyWithWhereWithoutPostInput {
-  where: CommentsScalarWhereInput!
-  data: CommentsUpdateManyMutationInput!
+input UsersUpsertWithoutCommentsInput {
+  update: UsersUpdateWithoutCommentsInput!
+  create: UsersCreateWithoutCommentsInput!
+  where: UsersWhereInput
 }
 
-input CommentsScalarWhereInput {
-  AND: [CommentsScalarWhereInput!]
-  OR: [CommentsScalarWhereInput!]
-  NOT: [CommentsScalarWhereInput!]
-  id: StringFilter
-  content: StringFilter
-  entityStatus: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  usersId: StringFilter
-  postsId: StringFilter
+input UsersUpdateWithoutCommentsInput {
+  id: StringFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  phone: StringFieldUpdateOperationsInput
+  firstName: StringFieldUpdateOperationsInput
+  lastName: StringFieldUpdateOperationsInput
+  isTfaEnabled: BoolFieldUpdateOperationsInput
+  tfaSecret: NullableStringFieldUpdateOperationsInput
+  entityStatus: StringFieldUpdateOperationsInput
+  password: StringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  Posts: PostsUpdateManyWithoutUserNestedInput
 }
 
-input CommentsUpdateManyMutationInput {
+input PostsUpdateManyWithoutUserNestedInput {
+  create: [PostsCreateWithoutUserInput!]
+  connectOrCreate: [PostsCreateOrConnectWithoutUserInput!]
+  upsert: [PostsUpsertWithWhereUniqueWithoutUserInput!]
+  createMany: PostsCreateManyUserInputEnvelope
+  set: [PostsWhereUniqueInput!]
+  disconnect: [PostsWhereUniqueInput!]
+  delete: [PostsWhereUniqueInput!]
+  connect: [PostsWhereUniqueInput!]
+  update: [PostsUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [PostsUpdateManyWithWhereWithoutUserInput!]
+  deleteMany: [PostsScalarWhereInput!]
+}
+
+input PostsUpsertWithWhereUniqueWithoutUserInput {
+  where: PostsWhereUniqueInput!
+  update: PostsUpdateWithoutUserInput!
+  create: PostsCreateWithoutUserInput!
+}
+
+input PostsUpdateWithoutUserInput {
   id: StringFieldUpdateOperationsInput
   content: StringFieldUpdateOperationsInput
+  visibility: StringFieldUpdateOperationsInput
   entityStatus: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
+  Comments: CommentsUpdateManyWithoutPostNestedInput
 }
 
 input PostsUpdateWithWhereUniqueWithoutUserInput {
@@ -844,106 +990,32 @@ input UsersUpdateToOneWithWhereWithoutCommentsInput {
   data: UsersUpdateWithoutCommentsInput!
 }
 
-input PostsUpdateOneRequiredWithoutCommentsNestedInput {
-  create: PostsCreateWithoutCommentsInput
-  connectOrCreate: PostsCreateOrConnectWithoutCommentsInput
-  upsert: PostsUpsertWithoutCommentsInput
-  connect: PostsWhereUniqueInput
-  update: PostsUpdateToOneWithWhereWithoutCommentsInput
-}
-
-input PostsUpsertWithoutCommentsInput {
-  update: PostsUpdateWithoutCommentsInput!
-  create: PostsCreateWithoutCommentsInput!
-  where: PostsWhereInput
-}
-
-input PostsUpdateWithoutCommentsInput {
-  id: StringFieldUpdateOperationsInput
-  content: StringFieldUpdateOperationsInput
-  visibility: StringFieldUpdateOperationsInput
-  entityStatus: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-  user: UsersUpdateOneWithoutPostsNestedInput
-}
-
-input UsersUpdateOneWithoutPostsNestedInput {
-  create: UsersCreateWithoutPostsInput
-  connectOrCreate: UsersCreateOrConnectWithoutPostsInput
-  upsert: UsersUpsertWithoutPostsInput
-  disconnect: UsersWhereInput
-  delete: UsersWhereInput
-  connect: UsersWhereUniqueInput
-  update: UsersUpdateToOneWithWhereWithoutPostsInput
-}
-
-input UsersUpsertWithoutPostsInput {
-  update: UsersUpdateWithoutPostsInput!
-  create: UsersCreateWithoutPostsInput!
-  where: UsersWhereInput
-}
-
-input UsersUpdateWithoutPostsInput {
-  id: StringFieldUpdateOperationsInput
-  email: StringFieldUpdateOperationsInput
-  phone: StringFieldUpdateOperationsInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
-  isTfaEnabled: BoolFieldUpdateOperationsInput
-  tfaSecret: NullableStringFieldUpdateOperationsInput
-  entityStatus: StringFieldUpdateOperationsInput
-  password: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-  Comments: CommentsUpdateManyWithoutUserNestedInput
-}
-
-input CommentsUpdateManyWithoutUserNestedInput {
-  create: [CommentsCreateWithoutUserInput!]
-  connectOrCreate: [CommentsCreateOrConnectWithoutUserInput!]
-  upsert: [CommentsUpsertWithWhereUniqueWithoutUserInput!]
-  createMany: CommentsCreateManyUserInputEnvelope
-  set: [CommentsWhereUniqueInput!]
-  disconnect: [CommentsWhereUniqueInput!]
-  delete: [CommentsWhereUniqueInput!]
-  connect: [CommentsWhereUniqueInput!]
-  update: [CommentsUpdateWithWhereUniqueWithoutUserInput!]
-  updateMany: [CommentsUpdateManyWithWhereWithoutUserInput!]
-  deleteMany: [CommentsScalarWhereInput!]
-}
-
-input CommentsUpsertWithWhereUniqueWithoutUserInput {
+input CommentsUpdateWithWhereUniqueWithoutPostInput {
   where: CommentsWhereUniqueInput!
-  update: CommentsUpdateWithoutUserInput!
-  create: CommentsCreateWithoutUserInput!
+  data: CommentsUpdateWithoutPostInput!
 }
 
-input CommentsUpdateWithoutUserInput {
-  id: StringFieldUpdateOperationsInput
-  content: StringFieldUpdateOperationsInput
-  entityStatus: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-  post: PostsUpdateOneRequiredWithoutCommentsNestedInput
-}
-
-input CommentsUpdateWithWhereUniqueWithoutUserInput {
-  where: CommentsWhereUniqueInput!
-  data: CommentsUpdateWithoutUserInput!
-}
-
-input CommentsUpdateManyWithWhereWithoutUserInput {
+input CommentsUpdateManyWithWhereWithoutPostInput {
   where: CommentsScalarWhereInput!
   data: CommentsUpdateManyMutationInput!
 }
 
-input UsersUpdateToOneWithWhereWithoutPostsInput {
-  where: UsersWhereInput
-  data: UsersUpdateWithoutPostsInput!
+input CommentsCreateInput {
+  id: String
+  content: String!
+  entityStatus: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  user: UsersCreateNestedOneWithoutCommentsInput!
+  post: PostsCreateNestedOneWithoutCommentsInput!
 }
 
-input PostsUpdateToOneWithWhereWithoutCommentsInput {
-  where: PostsWhereInput
-  data: PostsUpdateWithoutCommentsInput!
+input CommentsUpdateInput {
+  id: StringFieldUpdateOperationsInput
+  content: StringFieldUpdateOperationsInput
+  entityStatus: StringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  user: UsersUpdateOneRequiredWithoutCommentsNestedInput
+  post: PostsUpdateOneRequiredWithoutCommentsNestedInput
 }

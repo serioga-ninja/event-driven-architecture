@@ -4,22 +4,29 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import MongoPostsRepository from '../repositories/mongo-posts.repository';
-import { AuthRequest } from '../../../../auth/src/types';
+import { FastifyRequest } from 'fastify';
+import { PostsService } from '../posts.service';
 
 @Injectable()
 export default class CanEditPostGuard implements CanActivate {
-  constructor(private readonly _postsRepository: MongoPostsRepository) {}
+  constructor(private readonly _postsRepository: PostsService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<AuthRequest>();
+    const request = context.switchToHttp().getRequest<FastifyRequest>();
     const postId = (request.body as { id: string }).id;
-    const userId = request.user._id;
+    const userId = request.user?.id;
 
-    const post = await this._postsRepository.findOneBy({
-      _id: postId,
-      authorId: userId,
-    });
+    if (!userId) {
+      throw new ForbiddenException('You are not allowed to edit this post');
+    }
+
+    const post = await this._postsRepository.findOneBy(
+      {
+        id: postId,
+        authorId: userId,
+      },
+      { select: { id: true } },
+    );
 
     if (!post) {
       throw new ForbiddenException('You are not allowed to edit this post');

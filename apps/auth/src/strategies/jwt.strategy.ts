@@ -26,7 +26,7 @@ export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException('Invalid token');
     }
 
-    const authUser = await this._authCacheService.getAuthUserCache(user._id);
+    const authUser = await this._authCacheService.getAuthUserCache(user.id);
 
     if (!authUser) {
       throw new UnauthorizedException('User not found');

@@ -1,25 +1,27 @@
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   PostsModel,
-  PostsPaginatedResultModel,
   PostsPaginatedQueryInput,
-  PostsCreateInput,
-  PostsUpdateInput,
+  PostsPaginatedResultModel,
 } from './models';
-import MongoPostsRepository from '../repositories/mongo-posts.repository';
 import { GraphQLResolveInfo } from 'graphql/type';
 import {
+  CreateOnePostsArgs,
+  type CreateOptions,
+  CurrentUser,
   JwtAuthGuard,
   TokenPayload,
-  updateFindOptions,
-  CurrentUser,
+  UpdateOnePostsArgs,
+  UpdateOptions,
 } from '@app/common';
 import { UseGuards } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
+import { PostsService } from '../posts.service';
+import { Posts } from '@prisma/client';
 
 @Resolver(() => PostsModel)
 export default class PostsResolver {
-  constructor(private readonly _postsRepository: MongoPostsRepository) {}
+  constructor(private readonly _postsRepository: PostsService) {}
 
   @Query(() => PostsModel)
   handleGetPost(@Args('id') id: string, @Info() info: GraphQLResolveInfo) {
@@ -36,27 +38,27 @@ export default class PostsResolver {
   @Mutation(() => PostsModel)
   @UseGuards(JwtAuthGuard)
   handleCreatePost(
-    @Args('createPost') body: PostsCreateInput,
+    @Args() { data }: CreateOnePostsArgs,
     @CurrentUser() user: TokenPayload,
   ) {
     return this._postsRepository.create({
-      ...body,
-      authorId: user._id,
-    });
+      ...data,
+      usersId: user.id,
+    } as CreateOptions<Posts>);
   }
 
   @Mutation(() => PostsModel)
   @UseGuards(JwtAuthGuard)
   handleUpdatePost(
-    @Args('updatePost') body: PostsUpdateInput,
+    @Args() { data }: UpdateOnePostsArgs,
     @CurrentUser() user: TokenPayload,
   ) {
     return this._postsRepository.updateOneBy(
       {
-        authorId: user._id,
-        _id: body.id,
+        id: data.id,
+        userId: user.id,
       },
-      body,
+      data as UpdateOptions<Posts>,
     );
   }
 }

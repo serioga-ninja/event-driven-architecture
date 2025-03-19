@@ -45,14 +45,14 @@ export default class AuthService {
 
     return this._commandBus.execute(
       new LoginUserCommand({
-        _id: authUser._id,
+        id: authUser.id,
         email: authUser.email,
       }),
     );
   }
 
   async logout(user: AuthUser) {
-    await this._authCacheService.removeAuthUserCache(user._id);
+    await this._authCacheService.removeAuthUserCache(user.id);
 
     this._eventBus.publish(new UserLoggedOutEvent(user));
   }
@@ -74,6 +74,6 @@ export default class AuthService {
       throw new UnauthorizedException('Credentials are not valid.');
     }
 
-    return pick(user.toObject(), ['_id', 'email', 'isTfaEnabled', 'tfaSecret']);
+    return pick(user.toObject(), ['id', 'email', 'isTfaEnabled', 'tfaSecret']);
   }
 }

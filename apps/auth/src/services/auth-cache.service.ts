@@ -21,7 +21,7 @@ export default class AuthCacheService {
 
   setAuthUserCache({ user }: SetAuthUserCacheProps) {
     return this._cacheManager.set(
-      this._buildKey(user._id),
+      this._buildKey(user.id),
       user,
       this._config.get('JWT_EXPIRATION_SEC') * 1000,
     );

@@ -4,7 +4,7 @@ import { GrpcMethod, MessagePattern } from '@nestjs/microservices';
 import type { RegisterUserDto } from './dtos';
 import { JwtAuthGuard, LocalAuthGuard } from './guards';
 import { AuthService } from './services';
-import { AuthRequest, LoginRequest } from './types';
+import { LoginRequest } from './types';
 import LoginUserDto from './dtos/login-user.dto';
 
 @Controller('auth')
@@ -24,8 +24,8 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('logout')
-  handleLogOut(@Request() req: AuthRequest) {
-    return this.authService.logout(req.user);
+  handleLogOut(@CurrentUser() user: TokenPayload) {
+    return this.authService.logout(user);
   }
 
   @UseGuards(JwtAuthGuard)
