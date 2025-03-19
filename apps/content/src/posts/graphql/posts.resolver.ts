@@ -15,6 +15,7 @@ import {
   CurrentUser,
 } from '@app/common';
 import { UseGuards } from '@nestjs/common';
+import { PrismaSelect } from '@paljs/plugins';
 
 @Resolver(() => PostsModel)
 export default class PostsResolver {
@@ -22,9 +23,9 @@ export default class PostsResolver {
 
   @Query(() => PostsModel)
   handleGetPost(@Args('id') id: string, @Info() info: GraphQLResolveInfo) {
-    const options = updateFindOptions(info);
+    const prismaSelect = new PrismaSelect(info).value;
 
-    return this._postsRepository.findOneById(id, options);
+    return this._postsRepository.findOneById(id, prismaSelect);
   }
 
   @Query(() => PostsPaginatedResultModel)

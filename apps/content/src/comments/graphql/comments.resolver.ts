@@ -1,42 +1,57 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CommentsService } from '../comments.service';
-import { Comment } from './entities/comment.entity';
-import { CreateCommentInput } from './dto/create-comment.input';
-import { UpdateCommentInput } from './dto/update-comment.input';
+import {
+  CommentsUpdateInput,
+  CreateOneCommentsArgs,
+  CurrentUser,
+  FindManyCommentsArgs,
+  TokenPayload,
+} from '@app/common';
+import { PrismaSelect } from '@paljs/plugins';
+import { GraphQLResolveInfo } from 'graphql/type';
+import { CommentsModel } from './entities';
 
-@Resolver(() => Comment)
+@Resolver(() => CommentsModel)
 export class CommentsResolver {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Mutation(() => Comment)
+  @Query(() => [CommentsModel], { name: 'comments' })
+  findAll(@Args() query: FindManyCommentsArgs) {
+    return this.commentsService.findManyBy(query.where);
+  }
+
+  @Query(() => CommentsModel, { name: 'comment' })
+  findOne(@Args('id') id: string, @Info() info: GraphQLResolveInfo) {
+    const prismaSelect = new PrismaSelect(info).value;
+
+    return this.commentsService.findOneById(id, prismaSelect);
+  }
+
+  @Mutation(() => CommentsModel)
   createComment(
-    @Args('createCommentInput') createCommentInput: CreateCommentInput,
+    @Args() createCommentInput: CreateOneCommentsArgs,
+    @CurrentUser() user: TokenPayload,
   ) {
-    return this.commentsService.create(createCommentInput);
+    return this.commentsService.create({
+      ...createCommentInput.data,
+      usersId: user._id,
+    } as any);
   }
 
-  @Query(() => [Comment], { name: 'comments' })
-  findAll() {
-    return this.commentsService.findAll();
-  }
-
-  @Query(() => Comment, { name: 'comment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.commentsService.findOne(id);
-  }
-
-  @Mutation(() => Comment)
+  @Mutation(() => CommentsModel)
   updateComment(
-    @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
+    @Args('updateCommentInput') updateCommentInput: CommentsUpdateInput,
   ) {
-    return this.commentsService.update(
-      updateCommentInput.id,
-      updateCommentInput,
+    return this.commentsService.updateOneBy(
+      {
+        id: updateCommentInput.id,
+      },
+      updateCommentInput as any,
     );
   }
 
-  @Mutation(() => Comment)
-  removeComment(@Args('id', { type: () => Int }) id: number) {
-    return this.commentsService.remove(id);
+  @Mutation(() => CommentsModel)
+  removeComment(@Args('id') id: string) {
+    return this.commentsService.deleteById(id);
   }
 }

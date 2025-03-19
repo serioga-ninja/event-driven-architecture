@@ -40,11 +40,17 @@ export default class AbstractRepository<Entity> {
     throw new NotImplementedException('Method not implemented');
   }
 
-  findOneById(_id: string): Promise<Entity | null> {
+  findOneById(
+    _id: string,
+    _options: FindOneOptions<Entity> = {},
+  ): Promise<Entity | null> {
     throw new NotImplementedException('Method not implemented');
   }
 
-  findOneByOrThrow(_query: FindOptions<Entity>): Promise<Entity> {
+  findOneByOrThrow(
+    _query: FindOptions<Entity>,
+    options: FindOneOptions<Entity> = {},
+  ): Promise<Entity> {
     throw new NotImplementedException('Method not implemented');
   }
 

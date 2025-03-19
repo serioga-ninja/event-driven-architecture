@@ -1,26 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCommentInput } from './graphql/dto/create-comment.input';
-import { UpdateCommentInput } from './graphql/dto/update-comment.input';
+import { PrismaRepository } from '@app/common/database/prisma.repository';
+import type { Comments } from '@prisma/client';
+import { CreateOptions, EntityStatus, PrismaService } from '@app/common';
 
 @Injectable()
-export class CommentsService {
-  create(createCommentInput: CreateCommentInput) {
-    return 'This action adds a new comment';
+export class CommentsService extends PrismaRepository<Comments> {
+  constructor(prisma: PrismaService) {
+    super(prisma, 'comments');
   }
 
-  findAll() {
-    return `This action returns all comments`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
-
-  update(id: number, updateCommentInput: UpdateCommentInput) {
-    return `This action updates a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  create(data: CreateOptions<Comments>): Promise<Comments> {
+    return super.create({
+      entityStatus: EntityStatus.ACTIVE,
+      ...data,
+    });
   }
 }

@@ -1,0 +1,34 @@
+import { Field } from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
+import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
+import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-update-operations.input';
+import { UsersUpdateOneWithoutPostsNestedInput } from '../users/users-update-one-without-posts-nested.input';
+import { CommentsUpdateManyWithoutPostNestedInput } from '../comments/comments-update-many-without-post-nested.input';
+
+@InputType()
+export class PostsUpdateInput {
+
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: StringFieldUpdateOperationsInput;
+
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    content?: StringFieldUpdateOperationsInput;
+
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    visibility?: StringFieldUpdateOperationsInput;
+
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    entityStatus?: StringFieldUpdateOperationsInput;
+
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: DateTimeFieldUpdateOperationsInput;
+
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: DateTimeFieldUpdateOperationsInput;
+
+    @Field(() => UsersUpdateOneWithoutPostsNestedInput, {nullable:true})
+    user?: UsersUpdateOneWithoutPostsNestedInput;
+
+    @Field(() => CommentsUpdateManyWithoutPostNestedInput, {nullable:true})
+    Comments?: CommentsUpdateManyWithoutPostNestedInput;
+}
