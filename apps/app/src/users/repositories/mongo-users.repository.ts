@@ -14,7 +14,7 @@ export default class MongoUsersRepository extends MongoRepository<Users> {
   }
 
   async isEmailUnique(email: string) {
-    const user = await this.findOneBy({ email }, { select: ['_id'] });
+    const user = await this.findOneBy({ email }, { select: { id: true } });
 
     return !user;
   }

@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 import { LoginUserCommand, RegisterUserCommand } from '../commands';
 import type { RegisterUserDto } from '../dtos';
 import { UserLoggedOutEvent } from '../events';
-import { MongoAuthRepository } from '../repositories';
+import { AuthRepository } from '../repositories';
 import { AuthUser, ValidateUserReturn } from '../types';
 import AuthCacheService from './auth-cache.service';
 import PasswordService from './passwords.service';
@@ -14,7 +14,7 @@ import { authenticator } from 'otplib';
 @Injectable()
 export default class AuthService {
   constructor(
-    private readonly _authRepository: MongoAuthRepository,
+    private readonly _authRepository: AuthRepository,
     private readonly _passwordService: PasswordService,
     private readonly _commandBus: CommandBus,
     private readonly _authCacheService: AuthCacheService,
@@ -63,7 +63,15 @@ export default class AuthService {
   ): Promise<ValidateUserReturn> {
     const user = await this._authRepository.findOneBy(
       { email },
-      { select: ['_id', 'email', 'password', 'isTfaEnabled', 'tfaSecret'] },
+      {
+        select: {
+          id: true,
+          email: true,
+          password: true,
+          isTfaEnabled: true,
+          tfaSecret: true,
+        },
+      },
     );
     const passwordIsValid = this._passwordService.comparePasswords(
       password,
@@ -74,6 +82,11 @@ export default class AuthService {
       throw new UnauthorizedException('Credentials are not valid.');
     }
 
-    return pick(user.toObject(), ['id', 'email', 'isTfaEnabled', 'tfaSecret']);
+    return pick(user, [
+      'id',
+      'email',
+      'isTfaEnabled',
+      'tfaSecret',
+    ]) as ValidateUserReturn;
   }
 }

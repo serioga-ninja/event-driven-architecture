@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { authenticator } from 'otplib';
-import MongoUsersRepository from '../users/repositories/mongo-users.repository';
 import type { AppConfig } from '../app.types';
 import { SecretKey } from '@otplib/core/utils';
+import { UsersRepository } from '../users/repositories';
 
 type VerifyTfaTokenInput = {
   token: string;
@@ -19,7 +19,7 @@ type VerifyTfaTokenInput = {
 export default class SecurityService {
   constructor(
     private readonly _configService: ConfigService<AppConfig, true>,
-    private readonly _usersRepository: MongoUsersRepository,
+    private readonly _usersRepository: UsersRepository,
   ) {}
 
   async initializeEnabling2FA(email: string) {

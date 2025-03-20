@@ -51,7 +51,6 @@ import { JwtStrategy, LocalStrategy } from './strategies';
     PasswordService,
     LocalStrategy,
     JwtStrategy,
-    MongoAuthRepository,
     RegisterUserHandler,
     SendRegistrationEmailHandler,
     LoginUserHandler,

@@ -3,12 +3,12 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import MongoUsersRepository from '../repositories/mongo-users.repository';
+import UsersRepository from '../repositories/users.repository';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
 export default class IsEmailUnique implements ValidatorConstraintInterface {
-  constructor(private readonly _usersRepository: MongoUsersRepository) {}
+  constructor(private readonly _usersRepository: UsersRepository) {}
 
   validate(email: string): Promise<boolean> {
     return this._usersRepository.isEmailUnique(email);

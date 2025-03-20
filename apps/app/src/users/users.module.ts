@@ -1,20 +1,19 @@
 import {
   AuthModule,
+  DatabaseModule,
   EMAILS_QUEUE,
   EMAILS_SERVICE,
   RmqModule,
 } from '@app/common';
 import { Global, Module } from '@nestjs/common';
 import UsersController from './users.controller';
-import MongoUsersRepository from './repositories/mongo-users.repository';
 import { UsersService } from './users.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Users, UsersSchema } from './mongo-schemas';
+import { UsersRepository } from './repositories';
 
 @Global()
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
+    DatabaseModule,
     RmqModule.register({
       name: EMAILS_SERVICE,
       queue: EMAILS_QUEUE,
@@ -22,7 +21,7 @@ import { Users, UsersSchema } from './mongo-schemas';
     AuthModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, MongoUsersRepository],
-  exports: [MongoUsersRepository, UsersService],
+  providers: [UsersService, UsersRepository],
+  exports: [UsersService, UsersRepository],
 })
 export class UsersModule {}
