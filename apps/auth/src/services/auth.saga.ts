@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ofType, Saga } from '@nestjs/cqrs';
 import { mergeMap, Observable, of } from 'rxjs';
-import { SendRegistrationEmailCommand } from '../commands';
-import ResetAuthUserCacheCommand from '../commands/reset-auth-user-cache.command';
+import {
+  ResetAuthUserCacheCommand,
+  SendRegistrationEmailCommand,
+} from '../commands';
 import { UserLoggedInEvent, UserRegisteredEvent } from '../events';
 
 @Injectable()
