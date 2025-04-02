@@ -6,6 +6,7 @@ import { AuthRepository } from '../repositories';
 import PasswordService from '../services/passwords.service';
 import RegisterUserCommand from './register-user.command';
 import { Users } from '@prisma/client';
+import { EntityStatus } from '@app/common';
 
 @CommandHandler(RegisterUserCommand)
 export default class RegisterUserHandler
@@ -25,7 +26,10 @@ export default class RegisterUserHandler
     createUserRequest.password = this._passwordService.generatePassword(
       createUserRequest.password,
     );
-    const user = await this._authRepository.create(createUserRequest);
+    const user = await this._authRepository.create({
+      ...createUserRequest,
+      entityStatus: EntityStatus.ACTIVE,
+    });
     this._eventBus.publish(new UserRegisteredEvent(user.id, user.email));
 
     return {

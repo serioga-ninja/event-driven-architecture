@@ -16,7 +16,7 @@ export default class SendRegistrationEmailHandler
   ) {}
 
   async execute({ id }: SendRegistrationEmailCommand) {
-    const user = await this._authRepository.findOneByOrThrow({ _id: id });
+    const user = await this._authRepository.findOneByOrThrow({ id });
     const to = user.email;
 
     this._emailsService.emit(
