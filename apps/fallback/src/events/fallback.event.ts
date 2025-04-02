@@ -1,3 +1,5 @@
+import { AbstractEvent } from '@app/common';
+
 type FallbackOptions = {
   event: object;
   eventType: string;
@@ -5,8 +7,10 @@ type FallbackOptions = {
   queue: string;
 };
 
-export default class FallbackEvent {
-  public static type = 'fallback';
+export default class FallbackEvent extends AbstractEvent {
+  public static type = 'fallback.create';
 
-  constructor(public readonly data: FallbackOptions) {}
+  constructor(public readonly data: FallbackOptions) {
+    super();
+  }
 }
