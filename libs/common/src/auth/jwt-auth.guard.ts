@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ClientGrpc, ClientProxy } from '@nestjs/microservices';
 import { catchError, map, Observable, tap } from 'rxjs';
-import { AUTH_SERVICE, GRPC_AUTH_SERVICE } from '../rmq';
+import { AUTH_SERVICE, GRPC_AUTH_SERVICE } from '../message-broker';
 import { ValidateUserEvent } from './events';
 import {
   AuthModuleConfig,

@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(FallbackModule);
   const rmqService = app.get(RmqService);
 
-  app.connectMicroservice(rmqService.getOptions(FALLBACK_QUEUE));
+  app.connectMicroservice(rmqService.getServerConfig(FALLBACK_QUEUE));
 
   await app.startAllMicroservices();
 }

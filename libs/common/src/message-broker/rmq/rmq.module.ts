@@ -35,7 +35,8 @@ export default class RmqModule {
           })),
         ),
       ],
-      exports: [ClientsModule],
+      providers: [RmqService],
+      exports: [ClientsModule, RmqService],
     };
   }
 }

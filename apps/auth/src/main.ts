@@ -21,7 +21,7 @@ async function bootstrap() {
   const rmqService = app.get(RmqService);
   const grpcService = app.get(GrpcService);
 
-  app.connectMicroservice(rmqService.getOptions(AUTH_QUEUE, true));
+  app.connectMicroservice(rmqService.getServerConfig(AUTH_QUEUE, true));
   app.connectMicroservice(
     grpcService.getOptions({
       package: 'auth',

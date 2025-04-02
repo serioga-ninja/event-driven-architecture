@@ -1,12 +1,12 @@
-import { EMAILS_QUEUE, RmqService } from '@app/common';
+import { EMAILS_QUEUE, BrokerConfigService } from '@app/common';
 import { NestFactory } from '@nestjs/core';
 import { EmailsModule } from './emails.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(EmailsModule);
-  const rmqService = app.get(RmqService);
+  const brokerConfig = app.get(BrokerConfigService);
 
-  app.connectMicroservice(rmqService.getOptions(EMAILS_QUEUE));
+  app.connectMicroservice(brokerConfig.getServerConfig(EMAILS_QUEUE));
 
   await app.startAllMicroservices();
 }

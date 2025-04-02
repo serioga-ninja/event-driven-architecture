@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AUTH_QUEUE, AUTH_SERVICE, GRPC_AUTH_SERVICE } from '../rmq';
-import RmqModule from '../rmq/rmq.module';
+import RmqModule from '@app/common/message-broker/rmq/rmq.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
 import { AuthModuleConfig } from './types';
 import JwtAuthGuard from '@app/common/auth/jwt-auth.guard';
+import { AUTH_QUEUE, AUTH_SERVICE, GRPC_AUTH_SERVICE } from '../message-broker';
 
 @Module({
   imports: [

@@ -3,15 +3,14 @@ import {
   DatabaseModule,
   EMAILS_QUEUE,
   EMAILS_SERVICE,
-  RmqModule,
   GrpcModule,
+  KafkaModule,
+  RmqModule,
 } from '@app/common';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
-import { MongooseModule } from '@nestjs/mongoose';
 import CommonModule from '../../../libs/common/src/common/common.module';
-import { Users, UsersSchema } from '../../app/src/users/mongo-schemas';
 import { AuthController } from './auth.controller';
 import {
   LoginUserHandler,
@@ -19,11 +18,11 @@ import {
   ResetAuthUserCacheHandler,
   SendRegistrationEmailHandler,
 } from './commands';
-import { MongoAuthRepository } from './repositories';
 import { authConfigSchema } from './schemas';
 import { AuthSaga, AuthService, PasswordService } from './services';
 import AuthCacheService from './services/auth-cache.service';
 import { JwtStrategy, LocalStrategy } from './strategies';
+import AuthRepository from './repositories/auth.repository';
 
 @Module({
   imports: [
@@ -41,11 +40,19 @@ import { JwtStrategy, LocalStrategy } from './strategies';
     }),
     CacheModule,
     GrpcModule,
-    MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
+    KafkaModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        brokers: [configService.get<string>('KAFKA_URL') as string],
+        topic: configService.get<string>('KAFKA_TOPIC') || 'default-topic',
+      }),
+    }),
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
+    AuthRepository,
     AuthSaga,
     AuthCacheService,
     PasswordService,

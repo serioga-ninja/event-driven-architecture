@@ -1,8 +1,11 @@
 <h1>Roadmap</h1>
 
-- [x] Дати змогу юзерам робити пости
-- [ ] Додати Graphql
-- [ ] Додати Elasticsearch
-- [ ] Додати notifications сервіс для пушу івентів з SSE
-- [ ] Додати Kubernetes
-- [ ] Додати load balancer (Nginx або AWS Elastic Load Balancing)
+- [x] Allow users to create posts
+- [x] Add GraphQL
+- [ ] Add Kafka
+- [ ] Add NATS
+- [ ] Add Kubernetes
+- [ ] Add Elasticsearch
+- [ ] Add a notification service for pushing events with SSE
+- [ ] Add a load balancer (Nginx or AWS Elastic Load Balancing)
+- [ ] Change movie app to my app
