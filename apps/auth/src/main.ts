@@ -1,7 +1,7 @@
 import {
   AllExceptionsFilter,
   AUTH_QUEUE,
-  RmqService,
+  BrokerConfigService,
   GrpcService,
 } from '@app/common';
 import { ValidationPipe } from '@nestjs/common';
@@ -18,10 +18,10 @@ async function bootstrap() {
     AuthModule,
     new FastifyAdapter({ logger: true }),
   );
-  const rmqService = app.get(RmqService);
+  const brokerConfigService = app.get(BrokerConfigService);
   const grpcService = app.get(GrpcService);
 
-  app.connectMicroservice(rmqService.getServerConfig(AUTH_QUEUE, true));
+  app.connectMicroservice(brokerConfigService.getServerConfig(AUTH_QUEUE));
   app.connectMicroservice(
     grpcService.getOptions({
       package: 'auth',

@@ -4,11 +4,10 @@ import {
   EMAILS_QUEUE,
   EMAILS_SERVICE,
   GrpcModule,
-  KafkaModule,
-  RmqModule,
+  MessageBrokerModule,
 } from '@app/common';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import CommonModule from '../../../libs/common/src/common/common.module';
 import { AuthController } from './auth.controller';
@@ -34,20 +33,12 @@ import AuthRepository from './repositories/auth.repository';
     }),
     DatabaseModule,
     CommonModule,
-    RmqModule.register({
+    MessageBrokerModule.register({
       name: EMAILS_SERVICE,
       queue: EMAILS_QUEUE,
     }),
     CacheModule,
     GrpcModule,
-    KafkaModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        brokers: [configService.get<string>('KAFKA_URL') as string],
-        topic: configService.get<string>('KAFKA_TOPIC') || 'default-topic',
-      }),
-    }),
   ],
   controllers: [AuthController],
   providers: [

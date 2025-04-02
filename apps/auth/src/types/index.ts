@@ -1,4 +1,4 @@
-import type { CacheConfig, NODE_ENV } from '@app/common';
+import type { CacheConfig, MessageBrokerConfig, NODE_ENV } from '@app/common';
 import type { FastifyRequest } from 'fastify';
 import type { Users } from '../../../app/src/users/mongo-schemas';
 
@@ -9,9 +9,9 @@ export type AuthConfigs = {
   JWT_SECRET: string;
   JWT_EXPIRATION_SEC: number;
   MONGODB_URI: string;
-  RABBIT_MQ_URI: string;
   NODE_ENV: NODE_ENV;
-} & CacheConfig;
+} & CacheConfig &
+  MessageBrokerConfig;
 export type AuthUser = {
   id: string;
   email: string;
