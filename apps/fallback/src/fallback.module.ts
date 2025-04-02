@@ -2,7 +2,7 @@ import {
   DatabaseModule,
   EMAILS_QUEUE,
   EMAILS_SERVICE,
-  RmqModule,
+  MessageBrokerModule,
 } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -21,7 +21,7 @@ import { fallbackConfigSchema } from './schemas';
       validationSchema: fallbackConfigSchema,
       envFilePath: './apps/fallback/.env',
     }),
-    RmqModule.register({
+    MessageBrokerModule.register({
       name: EMAILS_SERVICE,
       queue: EMAILS_QUEUE,
     }),
