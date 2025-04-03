@@ -2,54 +2,62 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 services:
-  # users:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/users/Dockerfile
-  #     target: development
-  #   command: npm run start:dev users
-  #   env_file:
-  #     - ./apps/users/.env
-  #   depends_on:
-  #     - mongo
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - 3000:3000
 
-  # emails:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/emails/Dockerfile
-  #     target: development
-  #   command: npm run start:dev emails
-  #   env_file:
-  #     - ./apps/emails/.env
-  #   depends_on:
-  #     - mongodb-primary
-  #     - mongodb-secondary
-  #     - mongodb-primary
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - 3001:3001
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
+    command: npm run start:auth:debug
+    env_file:
+      - ./apps/auth/.env.docker
+    depends_on:
+      - postgres   # Changed from db to postgres
+      - redis
+      - rabbitmq
+      - kafka
+      - zookeeper
+    volumes:
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    ports:
+      - 3001:3001
+      - 9231:9231  # Expose debug port
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /user/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
 
-  db:
+
+  postgres:    # Renamed from db to postgres
     image: postgres:16
-    container_name: eda_db
+    container_name: eda_postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: eda_postgres   # Added explicit database name
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:   # Added healthcheck
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 
   redis:
     image: redis:7
+    container_name: eda_redis
     ports:
       - 6379:6379
 
@@ -129,40 +137,6 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
   #endregion
-
-  # mongodb-primary:
-  #   image: docker.io/bitnami/mongodb:5.0
-  #   environment:
-  #     - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
-  #     - MONGODB_REPLICA_SET_MODE=primary
-  #     - MONGODB_ROOT_PASSWORD=password123
-  #     - MONGODB_REPLICA_SET_KEY=replicasetkey123
-  #   volumes:
-  #     - 'mongodb_master_data:/bitnami/mongodb'
-  #   ports:
-  #     - '27017:27017'
-
-  # mongodb-secondary:
-  #   image: docker.io/bitnami/mongodb:5.0
-  #   depends_on:
-  #     - mongodb-primary
-  #   environment:
-  #     - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
-  #     - MONGODB_REPLICA_SET_MODE=secondary
-  #     - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
-  #     - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
-  #     - MONGODB_REPLICA_SET_KEY=replicasetkey123
-
-  # mongodb-arbiter:
-  #   image: docker.io/bitnami/mongodb:5.0
-  #   depends_on:
-  #     - mongodb-primary
-  #   environment:
-  #     - MONGODB_ADVERTISED_HOSTNAME=mongodb-arbiter
-  #     - MONGODB_REPLICA_SET_MODE=arbiter
-  #     - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
-  #     - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
-  #     - MONGODB_REPLICA_SET_KEY=replicasetkey123
 
 volumes:
   mongodbdata:

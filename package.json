@@ -14,7 +14,7 @@
     "start:auth:dev": "npm run start:dev auth",
     "start:debug": "nest start --debug --watch",
     "start:emails:debug": "nest start --debug=0.0.0.0:9230 --watch emails",
-    "start:auth:debug": "nest start --debug=0.0.0.0:9231 --watch auth",
+    "start:auth:debug": "nest start --debug=0.0.0.0:9231 --watch --watchAssets --poll=1000 auth",
     "start:prod": "node dist/apps/event-driven-architecture/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -23,6 +23,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/event-driven-architecture/test/jest-e2e.json",
     "prisma:generate": "npx prisma generate",
+    "prisma:deploy": "npx prisma migrate deploy && npx prisma generate",
     "migrate": "npx prisma migrate dev"
   },
   "dependencies": {

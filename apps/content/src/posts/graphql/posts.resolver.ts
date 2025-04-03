@@ -17,7 +17,7 @@ import {
 import { UseGuards } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
 import { PostsService } from '../posts.service';
-import { Posts } from '@prisma/client';
+import { Posts } from '@app/prisma';
 
 @Resolver(() => PostsModel)
 export default class PostsResolver {

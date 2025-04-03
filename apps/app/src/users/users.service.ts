@@ -9,7 +9,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { CreateUserDto } from './dtos';
 import { CreateUserEvent } from './events';
-import { Users } from '@prisma/client';
+import { Users } from '@app/prisma';
 import UsersRepository from './repositories/users.repository';
 
 @Injectable()

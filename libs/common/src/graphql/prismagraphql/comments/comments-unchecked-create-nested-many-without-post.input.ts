@@ -4,25 +4,24 @@ import { CommentsCreateWithoutPostInput } from './comments-create-without-post.i
 import { Type } from 'class-transformer';
 import { CommentsCreateOrConnectWithoutPostInput } from './comments-create-or-connect-without-post.input';
 import { CommentsCreateManyPostInputEnvelope } from './comments-create-many-post-input-envelope.input';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@app/prisma';
 import { CommentsWhereUniqueInput } from './comments-where-unique.input';
 
 @InputType()
 export class CommentsUncheckedCreateNestedManyWithoutPostInput {
+  @Field(() => [CommentsCreateWithoutPostInput], { nullable: true })
+  @Type(() => CommentsCreateWithoutPostInput)
+  create?: Array<CommentsCreateWithoutPostInput>;
 
-    @Field(() => [CommentsCreateWithoutPostInput], {nullable:true})
-    @Type(() => CommentsCreateWithoutPostInput)
-    create?: Array<CommentsCreateWithoutPostInput>;
+  @Field(() => [CommentsCreateOrConnectWithoutPostInput], { nullable: true })
+  @Type(() => CommentsCreateOrConnectWithoutPostInput)
+  connectOrCreate?: Array<CommentsCreateOrConnectWithoutPostInput>;
 
-    @Field(() => [CommentsCreateOrConnectWithoutPostInput], {nullable:true})
-    @Type(() => CommentsCreateOrConnectWithoutPostInput)
-    connectOrCreate?: Array<CommentsCreateOrConnectWithoutPostInput>;
+  @Field(() => CommentsCreateManyPostInputEnvelope, { nullable: true })
+  @Type(() => CommentsCreateManyPostInputEnvelope)
+  createMany?: CommentsCreateManyPostInputEnvelope;
 
-    @Field(() => CommentsCreateManyPostInputEnvelope, {nullable:true})
-    @Type(() => CommentsCreateManyPostInputEnvelope)
-    createMany?: CommentsCreateManyPostInputEnvelope;
-
-    @Field(() => [CommentsWhereUniqueInput], {nullable:true})
-    @Type(() => CommentsWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<CommentsWhereUniqueInput, 'id'>>;
+  @Field(() => [CommentsWhereUniqueInput], { nullable: true })
+  @Type(() => CommentsWhereUniqueInput)
+  connect?: Array<Prisma.AtLeast<CommentsWhereUniqueInput, 'id'>>;
 }

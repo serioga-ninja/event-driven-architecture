@@ -27,7 +27,13 @@
       ],
       "@app/common/*": [
         "libs/common/src/*"
+      ],
+      "@app/prisma": [
+        "libs/common/src/prisma"
       ]
     }
+  },
+  "watchOptions": {
+    "watchFile": "fixedPollingInterval"
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaRepository } from '@app/common/database/prisma.repository';
-import type { Comments } from '@prisma/client';
+import type { Comments } from '@app/prisma';
 import { CreateOptions, EntityStatus, PrismaService } from '@app/common';
 
 @Injectable()

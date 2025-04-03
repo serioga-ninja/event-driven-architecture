@@ -34,4 +34,8 @@ export class AuthController {
   validateUser(@CurrentUser() user: TokenPayload) {
     return user;
   }
+
+  v1alidateUser(@CurrentUser() user: TokenPayload) {
+    return user;
+  }
 }

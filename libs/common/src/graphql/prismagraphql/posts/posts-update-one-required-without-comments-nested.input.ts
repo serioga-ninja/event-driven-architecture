@@ -4,30 +4,31 @@ import { PostsCreateWithoutCommentsInput } from './posts-create-without-comments
 import { Type } from 'class-transformer';
 import { PostsCreateOrConnectWithoutCommentsInput } from './posts-create-or-connect-without-comments.input';
 import { PostsUpsertWithoutCommentsInput } from './posts-upsert-without-comments.input';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@app/prisma';
 import { PostsWhereUniqueInput } from './posts-where-unique.input';
 import { PostsUpdateToOneWithWhereWithoutCommentsInput } from './posts-update-to-one-with-where-without-comments.input';
 
 @InputType()
 export class PostsUpdateOneRequiredWithoutCommentsNestedInput {
+  @Field(() => PostsCreateWithoutCommentsInput, { nullable: true })
+  @Type(() => PostsCreateWithoutCommentsInput)
+  create?: PostsCreateWithoutCommentsInput;
 
-    @Field(() => PostsCreateWithoutCommentsInput, {nullable:true})
-    @Type(() => PostsCreateWithoutCommentsInput)
-    create?: PostsCreateWithoutCommentsInput;
+  @Field(() => PostsCreateOrConnectWithoutCommentsInput, { nullable: true })
+  @Type(() => PostsCreateOrConnectWithoutCommentsInput)
+  connectOrCreate?: PostsCreateOrConnectWithoutCommentsInput;
 
-    @Field(() => PostsCreateOrConnectWithoutCommentsInput, {nullable:true})
-    @Type(() => PostsCreateOrConnectWithoutCommentsInput)
-    connectOrCreate?: PostsCreateOrConnectWithoutCommentsInput;
+  @Field(() => PostsUpsertWithoutCommentsInput, { nullable: true })
+  @Type(() => PostsUpsertWithoutCommentsInput)
+  upsert?: PostsUpsertWithoutCommentsInput;
 
-    @Field(() => PostsUpsertWithoutCommentsInput, {nullable:true})
-    @Type(() => PostsUpsertWithoutCommentsInput)
-    upsert?: PostsUpsertWithoutCommentsInput;
+  @Field(() => PostsWhereUniqueInput, { nullable: true })
+  @Type(() => PostsWhereUniqueInput)
+  connect?: Prisma.AtLeast<PostsWhereUniqueInput, 'id'>;
 
-    @Field(() => PostsWhereUniqueInput, {nullable:true})
-    @Type(() => PostsWhereUniqueInput)
-    connect?: Prisma.AtLeast<PostsWhereUniqueInput, 'id'>;
-
-    @Field(() => PostsUpdateToOneWithWhereWithoutCommentsInput, {nullable:true})
-    @Type(() => PostsUpdateToOneWithWhereWithoutCommentsInput)
-    update?: PostsUpdateToOneWithWhereWithoutCommentsInput;
+  @Field(() => PostsUpdateToOneWithWhereWithoutCommentsInput, {
+    nullable: true,
+  })
+  @Type(() => PostsUpdateToOneWithWhereWithoutCommentsInput)
+  update?: PostsUpdateToOneWithWhereWithoutCommentsInput;
 }

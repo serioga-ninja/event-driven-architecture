@@ -3,7 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { UsersWhereInput } from './users-where.input';
 import { Type } from 'class-transformer';
 import { UsersOrderByWithRelationInput } from './users-order-by-with-relation.input';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@app/prisma';
 import { UsersWhereUniqueInput } from './users-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { UsersCountAggregateInput } from './users-count-aggregate.input';
@@ -12,29 +12,28 @@ import { UsersMaxAggregateInput } from './users-max-aggregate.input';
 
 @ArgsType()
 export class UsersAggregateArgs {
+  @Field(() => UsersWhereInput, { nullable: true })
+  @Type(() => UsersWhereInput)
+  where?: UsersWhereInput;
 
-    @Field(() => UsersWhereInput, {nullable:true})
-    @Type(() => UsersWhereInput)
-    where?: UsersWhereInput;
+  @Field(() => [UsersOrderByWithRelationInput], { nullable: true })
+  orderBy?: Array<UsersOrderByWithRelationInput>;
 
-    @Field(() => [UsersOrderByWithRelationInput], {nullable:true})
-    orderBy?: Array<UsersOrderByWithRelationInput>;
+  @Field(() => UsersWhereUniqueInput, { nullable: true })
+  cursor?: Prisma.AtLeast<UsersWhereUniqueInput, 'id' | 'email'>;
 
-    @Field(() => UsersWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<UsersWhereUniqueInput, 'id' | 'email'>;
+  @Field(() => Int, { nullable: true })
+  take?: number;
 
-    @Field(() => Int, {nullable:true})
-    take?: number;
+  @Field(() => Int, { nullable: true })
+  skip?: number;
 
-    @Field(() => Int, {nullable:true})
-    skip?: number;
+  @Field(() => UsersCountAggregateInput, { nullable: true })
+  _count?: UsersCountAggregateInput;
 
-    @Field(() => UsersCountAggregateInput, {nullable:true})
-    _count?: UsersCountAggregateInput;
+  @Field(() => UsersMinAggregateInput, { nullable: true })
+  _min?: UsersMinAggregateInput;
 
-    @Field(() => UsersMinAggregateInput, {nullable:true})
-    _min?: UsersMinAggregateInput;
-
-    @Field(() => UsersMaxAggregateInput, {nullable:true})
-    _max?: UsersMaxAggregateInput;
+  @Field(() => UsersMaxAggregateInput, { nullable: true })
+  _max?: UsersMaxAggregateInput;
 }

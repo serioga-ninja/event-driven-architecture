@@ -4,7 +4,7 @@ import {
   PrismaService,
   UpdateOptions,
 } from '@app/common';
-import type { Posts } from '@prisma/client';
+import type { Posts } from '@app/prisma';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

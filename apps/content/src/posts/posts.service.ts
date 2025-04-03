@@ -8,7 +8,7 @@ import {
   VisibilityLevels,
 } from '@app/common';
 import { PrismaRepository } from '@app/common/database/prisma.repository';
-import { Posts } from '@prisma/client';
+import { Posts } from '@app/prisma';
 
 @Injectable()
 export class PostsService extends PrismaRepository<Posts> {

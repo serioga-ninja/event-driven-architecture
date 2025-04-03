@@ -10,7 +10,7 @@ import { AuthRepository } from '../repositories';
 import PasswordService from '../services/passwords.service';
 import { EntityStatus } from '@app/common';
 import UserRegisteredEvent from '../events/user-registered.event';
-import { Users } from '@prisma/client';
+import { Users } from '@app/prisma';
 
 export class RegisterUserCommand extends Command<{
   id: string;

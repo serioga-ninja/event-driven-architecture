@@ -5,38 +5,37 @@ import { Type } from 'class-transformer';
 import { UsersCreateOrConnectWithoutPostsInput } from './users-create-or-connect-without-posts.input';
 import { UsersUpsertWithoutPostsInput } from './users-upsert-without-posts.input';
 import { UsersWhereInput } from './users-where.input';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@app/prisma';
 import { UsersWhereUniqueInput } from './users-where-unique.input';
 import { UsersUpdateToOneWithWhereWithoutPostsInput } from './users-update-to-one-with-where-without-posts.input';
 
 @InputType()
 export class UsersUpdateOneWithoutPostsNestedInput {
+  @Field(() => UsersCreateWithoutPostsInput, { nullable: true })
+  @Type(() => UsersCreateWithoutPostsInput)
+  create?: UsersCreateWithoutPostsInput;
 
-    @Field(() => UsersCreateWithoutPostsInput, {nullable:true})
-    @Type(() => UsersCreateWithoutPostsInput)
-    create?: UsersCreateWithoutPostsInput;
+  @Field(() => UsersCreateOrConnectWithoutPostsInput, { nullable: true })
+  @Type(() => UsersCreateOrConnectWithoutPostsInput)
+  connectOrCreate?: UsersCreateOrConnectWithoutPostsInput;
 
-    @Field(() => UsersCreateOrConnectWithoutPostsInput, {nullable:true})
-    @Type(() => UsersCreateOrConnectWithoutPostsInput)
-    connectOrCreate?: UsersCreateOrConnectWithoutPostsInput;
+  @Field(() => UsersUpsertWithoutPostsInput, { nullable: true })
+  @Type(() => UsersUpsertWithoutPostsInput)
+  upsert?: UsersUpsertWithoutPostsInput;
 
-    @Field(() => UsersUpsertWithoutPostsInput, {nullable:true})
-    @Type(() => UsersUpsertWithoutPostsInput)
-    upsert?: UsersUpsertWithoutPostsInput;
+  @Field(() => UsersWhereInput, { nullable: true })
+  @Type(() => UsersWhereInput)
+  disconnect?: UsersWhereInput;
 
-    @Field(() => UsersWhereInput, {nullable:true})
-    @Type(() => UsersWhereInput)
-    disconnect?: UsersWhereInput;
+  @Field(() => UsersWhereInput, { nullable: true })
+  @Type(() => UsersWhereInput)
+  delete?: UsersWhereInput;
 
-    @Field(() => UsersWhereInput, {nullable:true})
-    @Type(() => UsersWhereInput)
-    delete?: UsersWhereInput;
+  @Field(() => UsersWhereUniqueInput, { nullable: true })
+  @Type(() => UsersWhereUniqueInput)
+  connect?: Prisma.AtLeast<UsersWhereUniqueInput, 'id' | 'email'>;
 
-    @Field(() => UsersWhereUniqueInput, {nullable:true})
-    @Type(() => UsersWhereUniqueInput)
-    connect?: Prisma.AtLeast<UsersWhereUniqueInput, 'id' | 'email'>;
-
-    @Field(() => UsersUpdateToOneWithWhereWithoutPostsInput, {nullable:true})
-    @Type(() => UsersUpdateToOneWithWhereWithoutPostsInput)
-    update?: UsersUpdateToOneWithWhereWithoutPostsInput;
+  @Field(() => UsersUpdateToOneWithWhereWithoutPostsInput, { nullable: true })
+  @Type(() => UsersUpdateToOneWithWhereWithoutPostsInput)
+  update?: UsersUpdateToOneWithWhereWithoutPostsInput;
 }

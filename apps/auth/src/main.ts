@@ -37,3 +37,6 @@ async function bootstrap() {
   await app.listen(configService.get('PORT'), '0.0.0.0');
 }
 bootstrap();
+
+// Add to main.ts or auth.controller.ts temporarily
+console.log('CHANGE DddsTECTED:', new Date().toISOString());
