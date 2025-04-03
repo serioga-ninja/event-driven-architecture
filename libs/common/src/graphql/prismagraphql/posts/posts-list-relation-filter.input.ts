@@ -4,13 +4,12 @@ import { PostsWhereInput } from './posts-where.input';
 
 @InputType()
 export class PostsListRelationFilter {
+  @Field(() => PostsWhereInput, { nullable: true })
+  every?: PostsWhereInput;
 
-    @Field(() => PostsWhereInput, {nullable:true})
-    every?: PostsWhereInput;
+  @Field(() => PostsWhereInput, { nullable: true })
+  some?: PostsWhereInput;
 
-    @Field(() => PostsWhereInput, {nullable:true})
-    some?: PostsWhereInput;
-
-    @Field(() => PostsWhereInput, {nullable:true})
-    none?: PostsWhereInput;
+  @Field(() => PostsWhereInput, { nullable: true })
+  none?: PostsWhereInput;
 }

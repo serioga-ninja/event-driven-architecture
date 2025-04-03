@@ -6,34 +6,33 @@ import { PostsMaxAggregate } from './posts-max-aggregate.output';
 
 @ObjectType()
 export class PostsGroupBy {
+  @Field(() => String, { nullable: false })
+  id!: string;
 
-    @Field(() => String, {nullable:false})
-    id!: string;
+  @Field(() => String, { nullable: false })
+  content!: string;
 
-    @Field(() => String, {nullable:false})
-    content!: string;
+  @Field(() => String, { nullable: false })
+  visibility!: string;
 
-    @Field(() => String, {nullable:false})
-    visibility!: string;
+  @Field(() => String, { nullable: false })
+  entityStatus!: string;
 
-    @Field(() => String, {nullable:false})
-    entityStatus!: string;
+  @Field(() => Date, { nullable: false })
+  createdAt!: Date | string;
 
-    @Field(() => Date, {nullable:false})
-    createdAt!: Date | string;
+  @Field(() => Date, { nullable: false })
+  updatedAt!: Date | string;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date | string;
+  @Field(() => String, { nullable: true })
+  usersId?: string;
 
-    @Field(() => String, {nullable:true})
-    usersId?: string;
+  @Field(() => PostsCountAggregate, { nullable: true })
+  _count?: PostsCountAggregate;
 
-    @Field(() => PostsCountAggregate, {nullable:true})
-    _count?: PostsCountAggregate;
+  @Field(() => PostsMinAggregate, { nullable: true })
+  _min?: PostsMinAggregate;
 
-    @Field(() => PostsMinAggregate, {nullable:true})
-    _min?: PostsMinAggregate;
-
-    @Field(() => PostsMaxAggregate, {nullable:true})
-    _max?: PostsMaxAggregate;
+  @Field(() => PostsMaxAggregate, { nullable: true })
+  _max?: PostsMaxAggregate;
 }

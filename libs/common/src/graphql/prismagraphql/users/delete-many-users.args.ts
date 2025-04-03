@@ -6,11 +6,10 @@ import { Int } from '@nestjs/graphql';
 
 @ArgsType()
 export class DeleteManyUsersArgs {
+  @Field(() => UsersWhereInput, { nullable: true })
+  @Type(() => UsersWhereInput)
+  where?: UsersWhereInput;
 
-    @Field(() => UsersWhereInput, {nullable:true})
-    @Type(() => UsersWhereInput)
-    where?: UsersWhereInput;
-
-    @Field(() => Int, {nullable:true})
-    limit?: number;
+  @Field(() => Int, { nullable: true })
+  limit?: number;
 }

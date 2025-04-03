@@ -7,34 +7,33 @@ import { PostsCount } from './posts-count.output';
 
 @ObjectType()
 export class Posts {
+  @Field(() => ID, { nullable: false })
+  id!: string;
 
-    @Field(() => ID, {nullable:false})
-    id!: string;
+  @Field(() => String, { nullable: false })
+  content!: string;
 
-    @Field(() => String, {nullable:false})
-    content!: string;
+  @Field(() => String, { defaultValue: 'public', nullable: false })
+  visibility!: string;
 
-    @Field(() => String, {defaultValue:'public',nullable:false})
-    visibility!: string;
+  @Field(() => String, { nullable: false })
+  entityStatus!: string;
 
-    @Field(() => String, {nullable:false})
-    entityStatus!: string;
+  @Field(() => Date, { nullable: false })
+  createdAt!: Date;
 
-    @Field(() => Date, {nullable:false})
-    createdAt!: Date;
+  @Field(() => Date, { nullable: false })
+  updatedAt!: Date;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date;
+  @Field(() => String, { nullable: true })
+  usersId!: string | null;
 
-    @Field(() => String, {nullable:true})
-    usersId!: string | null;
+  @Field(() => Users, { nullable: true })
+  user?: Users | null;
 
-    @Field(() => Users, {nullable:true})
-    user?: Users | null;
+  @Field(() => [Comments], { nullable: true })
+  Comments?: Array<Comments>;
 
-    @Field(() => [Comments], {nullable:true})
-    Comments?: Array<Comments>;
-
-    @Field(() => PostsCount, {nullable:false})
-    _count?: PostsCount;
+  @Field(() => PostsCount, { nullable: false })
+  _count?: PostsCount;
 }

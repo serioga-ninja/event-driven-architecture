@@ -5,11 +5,10 @@ import { Type } from 'class-transformer';
 
 @InputType()
 export class CommentsCreateManyPostInputEnvelope {
+  @Field(() => [CommentsCreateManyPostInput], { nullable: false })
+  @Type(() => CommentsCreateManyPostInput)
+  data!: Array<CommentsCreateManyPostInput>;
 
-    @Field(() => [CommentsCreateManyPostInput], {nullable:false})
-    @Type(() => CommentsCreateManyPostInput)
-    data!: Array<CommentsCreateManyPostInput>;
-
-    @Field(() => Boolean, {nullable:true})
-    skipDuplicates?: boolean;
+  @Field(() => Boolean, { nullable: true })
+  skipDuplicates?: boolean;
 }

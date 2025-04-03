@@ -6,13 +6,12 @@ import { CommentsMaxAggregate } from './comments-max-aggregate.output';
 
 @ObjectType()
 export class AggregateComments {
+  @Field(() => CommentsCountAggregate, { nullable: true })
+  _count?: CommentsCountAggregate;
 
-    @Field(() => CommentsCountAggregate, {nullable:true})
-    _count?: CommentsCountAggregate;
+  @Field(() => CommentsMinAggregate, { nullable: true })
+  _min?: CommentsMinAggregate;
 
-    @Field(() => CommentsMinAggregate, {nullable:true})
-    _min?: CommentsMinAggregate;
-
-    @Field(() => CommentsMaxAggregate, {nullable:true})
-    _max?: CommentsMaxAggregate;
+  @Field(() => CommentsMaxAggregate, { nullable: true })
+  _max?: CommentsMaxAggregate;
 }

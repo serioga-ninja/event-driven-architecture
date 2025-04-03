@@ -5,8 +5,7 @@ import { Type } from 'class-transformer';
 
 @ArgsType()
 export class CreateOnePostsArgs {
-
-    @Field(() => PostsCreateInput, {nullable:false})
-    @Type(() => PostsCreateInput)
-    data!: PostsCreateInput;
+  @Field(() => PostsCreateInput, { nullable: false })
+  @Type(() => PostsCreateInput)
+  data!: PostsCreateInput;
 }

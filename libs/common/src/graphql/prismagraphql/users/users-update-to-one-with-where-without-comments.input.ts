@@ -6,12 +6,11 @@ import { UsersUpdateWithoutCommentsInput } from './users-update-without-comments
 
 @InputType()
 export class UsersUpdateToOneWithWhereWithoutCommentsInput {
+  @Field(() => UsersWhereInput, { nullable: true })
+  @Type(() => UsersWhereInput)
+  where?: UsersWhereInput;
 
-    @Field(() => UsersWhereInput, {nullable:true})
-    @Type(() => UsersWhereInput)
-    where?: UsersWhereInput;
-
-    @Field(() => UsersUpdateWithoutCommentsInput, {nullable:false})
-    @Type(() => UsersUpdateWithoutCommentsInput)
-    data!: UsersUpdateWithoutCommentsInput;
+  @Field(() => UsersUpdateWithoutCommentsInput, { nullable: false })
+  @Type(() => UsersUpdateWithoutCommentsInput)
+  data!: UsersUpdateWithoutCommentsInput;
 }

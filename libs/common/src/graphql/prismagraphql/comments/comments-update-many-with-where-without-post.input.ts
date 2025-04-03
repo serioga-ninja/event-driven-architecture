@@ -6,12 +6,11 @@ import { CommentsUpdateManyMutationInput } from './comments-update-many-mutation
 
 @InputType()
 export class CommentsUpdateManyWithWhereWithoutPostInput {
+  @Field(() => CommentsScalarWhereInput, { nullable: false })
+  @Type(() => CommentsScalarWhereInput)
+  where!: CommentsScalarWhereInput;
 
-    @Field(() => CommentsScalarWhereInput, {nullable:false})
-    @Type(() => CommentsScalarWhereInput)
-    where!: CommentsScalarWhereInput;
-
-    @Field(() => CommentsUpdateManyMutationInput, {nullable:false})
-    @Type(() => CommentsUpdateManyMutationInput)
-    data!: CommentsUpdateManyMutationInput;
+  @Field(() => CommentsUpdateManyMutationInput, { nullable: false })
+  @Type(() => CommentsUpdateManyMutationInput)
+  data!: CommentsUpdateManyMutationInput;
 }

@@ -4,25 +4,24 @@ import { SortOrder } from '../prisma/sort-order.enum';
 
 @InputType()
 export class PostsMinOrderByAggregateInput {
+  @Field(() => SortOrder, { nullable: true })
+  id?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    id?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  content?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    content?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  visibility?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    visibility?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  entityStatus?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    entityStatus?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  createdAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    createdAt?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  updatedAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    updatedAt?: `${SortOrder}`;
-
-    @Field(() => SortOrder, {nullable:true})
-    usersId?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  usersId?: `${SortOrder}`;
 }

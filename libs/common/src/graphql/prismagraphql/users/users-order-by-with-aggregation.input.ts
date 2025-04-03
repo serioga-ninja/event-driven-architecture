@@ -8,46 +8,45 @@ import { UsersMinOrderByAggregateInput } from './users-min-order-by-aggregate.in
 
 @InputType()
 export class UsersOrderByWithAggregationInput {
+  @Field(() => SortOrder, { nullable: true })
+  id?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    id?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  email?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    email?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  phone?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    phone?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  firstName?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    firstName?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  lastName?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    lastName?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  isTfaEnabled?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    isTfaEnabled?: `${SortOrder}`;
+  @Field(() => SortOrderInput, { nullable: true })
+  tfaSecret?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    tfaSecret?: SortOrderInput;
+  @Field(() => SortOrder, { nullable: true })
+  entityStatus?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    entityStatus?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  password?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    password?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  createdAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    createdAt?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  updatedAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    updatedAt?: `${SortOrder}`;
+  @Field(() => UsersCountOrderByAggregateInput, { nullable: true })
+  _count?: UsersCountOrderByAggregateInput;
 
-    @Field(() => UsersCountOrderByAggregateInput, {nullable:true})
-    _count?: UsersCountOrderByAggregateInput;
+  @Field(() => UsersMaxOrderByAggregateInput, { nullable: true })
+  _max?: UsersMaxOrderByAggregateInput;
 
-    @Field(() => UsersMaxOrderByAggregateInput, {nullable:true})
-    _max?: UsersMaxOrderByAggregateInput;
-
-    @Field(() => UsersMinOrderByAggregateInput, {nullable:true})
-    _min?: UsersMinOrderByAggregateInput;
+  @Field(() => UsersMinOrderByAggregateInput, { nullable: true })
+  _min?: UsersMinOrderByAggregateInput;
 }

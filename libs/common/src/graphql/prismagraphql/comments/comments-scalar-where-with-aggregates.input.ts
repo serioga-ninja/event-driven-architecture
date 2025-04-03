@@ -5,34 +5,33 @@ import { DateTimeWithAggregatesFilter } from '../prisma/date-time-with-aggregate
 
 @InputType()
 export class CommentsScalarWhereWithAggregatesInput {
+  @Field(() => [CommentsScalarWhereWithAggregatesInput], { nullable: true })
+  AND?: Array<CommentsScalarWhereWithAggregatesInput>;
 
-    @Field(() => [CommentsScalarWhereWithAggregatesInput], {nullable:true})
-    AND?: Array<CommentsScalarWhereWithAggregatesInput>;
+  @Field(() => [CommentsScalarWhereWithAggregatesInput], { nullable: true })
+  OR?: Array<CommentsScalarWhereWithAggregatesInput>;
 
-    @Field(() => [CommentsScalarWhereWithAggregatesInput], {nullable:true})
-    OR?: Array<CommentsScalarWhereWithAggregatesInput>;
+  @Field(() => [CommentsScalarWhereWithAggregatesInput], { nullable: true })
+  NOT?: Array<CommentsScalarWhereWithAggregatesInput>;
 
-    @Field(() => [CommentsScalarWhereWithAggregatesInput], {nullable:true})
-    NOT?: Array<CommentsScalarWhereWithAggregatesInput>;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  id?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    id?: StringWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  content?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    content?: StringWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  entityStatus?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    entityStatus?: StringWithAggregatesFilter;
+  @Field(() => DateTimeWithAggregatesFilter, { nullable: true })
+  createdAt?: DateTimeWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    createdAt?: DateTimeWithAggregatesFilter;
+  @Field(() => DateTimeWithAggregatesFilter, { nullable: true })
+  updatedAt?: DateTimeWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    updatedAt?: DateTimeWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  usersId?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    usersId?: StringWithAggregatesFilter;
-
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    postsId?: StringWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  postsId?: StringWithAggregatesFilter;
 }

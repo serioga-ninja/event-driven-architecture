@@ -9,52 +9,51 @@ import { CommentsListRelationFilter } from '../comments/comments-list-relation-f
 
 @InputType()
 export class UsersWhereInput {
+  @Field(() => [UsersWhereInput], { nullable: true })
+  AND?: Array<UsersWhereInput>;
 
-    @Field(() => [UsersWhereInput], {nullable:true})
-    AND?: Array<UsersWhereInput>;
+  @Field(() => [UsersWhereInput], { nullable: true })
+  OR?: Array<UsersWhereInput>;
 
-    @Field(() => [UsersWhereInput], {nullable:true})
-    OR?: Array<UsersWhereInput>;
+  @Field(() => [UsersWhereInput], { nullable: true })
+  NOT?: Array<UsersWhereInput>;
 
-    @Field(() => [UsersWhereInput], {nullable:true})
-    NOT?: Array<UsersWhereInput>;
+  @Field(() => StringFilter, { nullable: true })
+  id?: StringFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    id?: StringFilter;
+  @Field(() => StringFilter, { nullable: true })
+  email?: StringFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    email?: StringFilter;
+  @Field(() => StringFilter, { nullable: true })
+  phone?: StringFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    phone?: StringFilter;
+  @Field(() => StringFilter, { nullable: true })
+  firstName?: StringFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    firstName?: StringFilter;
+  @Field(() => StringFilter, { nullable: true })
+  lastName?: StringFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    lastName?: StringFilter;
+  @Field(() => BoolFilter, { nullable: true })
+  isTfaEnabled?: BoolFilter;
 
-    @Field(() => BoolFilter, {nullable:true})
-    isTfaEnabled?: BoolFilter;
+  @Field(() => StringNullableFilter, { nullable: true })
+  tfaSecret?: StringNullableFilter;
 
-    @Field(() => StringNullableFilter, {nullable:true})
-    tfaSecret?: StringNullableFilter;
+  @Field(() => StringFilter, { nullable: true })
+  entityStatus?: StringFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    entityStatus?: StringFilter;
+  @Field(() => StringFilter, { nullable: true })
+  password?: StringFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    password?: StringFilter;
+  @Field(() => DateTimeFilter, { nullable: true })
+  createdAt?: DateTimeFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    createdAt?: DateTimeFilter;
+  @Field(() => DateTimeFilter, { nullable: true })
+  updatedAt?: DateTimeFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    updatedAt?: DateTimeFilter;
+  @Field(() => PostsListRelationFilter, { nullable: true })
+  Posts?: PostsListRelationFilter;
 
-    @Field(() => PostsListRelationFilter, {nullable:true})
-    Posts?: PostsListRelationFilter;
-
-    @Field(() => CommentsListRelationFilter, {nullable:true})
-    Comments?: CommentsListRelationFilter;
+  @Field(() => CommentsListRelationFilter, { nullable: true })
+  Comments?: CommentsListRelationFilter;
 }

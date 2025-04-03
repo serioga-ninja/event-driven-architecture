@@ -5,43 +5,42 @@ import { CommentsCreateNestedManyWithoutUserInput } from '../comments/comments-c
 
 @InputType()
 export class UsersCreateInput {
+  @Field(() => String, { nullable: true })
+  id?: string;
 
-    @Field(() => String, {nullable:true})
-    id?: string;
+  @Field(() => String, { nullable: false })
+  email!: string;
 
-    @Field(() => String, {nullable:false})
-    email!: string;
+  @Field(() => String, { nullable: true })
+  phone?: string;
 
-    @Field(() => String, {nullable:true})
-    phone?: string;
+  @Field(() => String, { nullable: true })
+  firstName?: string;
 
-    @Field(() => String, {nullable:true})
-    firstName?: string;
+  @Field(() => String, { nullable: true })
+  lastName?: string;
 
-    @Field(() => String, {nullable:true})
-    lastName?: string;
+  @Field(() => Boolean, { nullable: true })
+  isTfaEnabled?: boolean;
 
-    @Field(() => Boolean, {nullable:true})
-    isTfaEnabled?: boolean;
+  @Field(() => String, { nullable: true })
+  tfaSecret?: string;
 
-    @Field(() => String, {nullable:true})
-    tfaSecret?: string;
+  @Field(() => String, { nullable: false })
+  entityStatus!: string;
 
-    @Field(() => String, {nullable:false})
-    entityStatus!: string;
+  @Field(() => String, { nullable: false })
+  password!: string;
 
-    @Field(() => String, {nullable:false})
-    password!: string;
+  @Field(() => Date, { nullable: true })
+  createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
+  @Field(() => Date, { nullable: true })
+  updatedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+  @Field(() => PostsCreateNestedManyWithoutUserInput, { nullable: true })
+  Posts?: PostsCreateNestedManyWithoutUserInput;
 
-    @Field(() => PostsCreateNestedManyWithoutUserInput, {nullable:true})
-    Posts?: PostsCreateNestedManyWithoutUserInput;
-
-    @Field(() => CommentsCreateNestedManyWithoutUserInput, {nullable:true})
-    Comments?: CommentsCreateNestedManyWithoutUserInput;
+  @Field(() => CommentsCreateNestedManyWithoutUserInput, { nullable: true })
+  Comments?: CommentsCreateNestedManyWithoutUserInput;
 }

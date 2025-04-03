@@ -7,46 +7,45 @@ import { DateTimeWithAggregatesFilter } from '../prisma/date-time-with-aggregate
 
 @InputType()
 export class UsersScalarWhereWithAggregatesInput {
+  @Field(() => [UsersScalarWhereWithAggregatesInput], { nullable: true })
+  AND?: Array<UsersScalarWhereWithAggregatesInput>;
 
-    @Field(() => [UsersScalarWhereWithAggregatesInput], {nullable:true})
-    AND?: Array<UsersScalarWhereWithAggregatesInput>;
+  @Field(() => [UsersScalarWhereWithAggregatesInput], { nullable: true })
+  OR?: Array<UsersScalarWhereWithAggregatesInput>;
 
-    @Field(() => [UsersScalarWhereWithAggregatesInput], {nullable:true})
-    OR?: Array<UsersScalarWhereWithAggregatesInput>;
+  @Field(() => [UsersScalarWhereWithAggregatesInput], { nullable: true })
+  NOT?: Array<UsersScalarWhereWithAggregatesInput>;
 
-    @Field(() => [UsersScalarWhereWithAggregatesInput], {nullable:true})
-    NOT?: Array<UsersScalarWhereWithAggregatesInput>;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  id?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    id?: StringWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  email?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    email?: StringWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  phone?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    phone?: StringWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  firstName?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    firstName?: StringWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  lastName?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    lastName?: StringWithAggregatesFilter;
+  @Field(() => BoolWithAggregatesFilter, { nullable: true })
+  isTfaEnabled?: BoolWithAggregatesFilter;
 
-    @Field(() => BoolWithAggregatesFilter, {nullable:true})
-    isTfaEnabled?: BoolWithAggregatesFilter;
+  @Field(() => StringNullableWithAggregatesFilter, { nullable: true })
+  tfaSecret?: StringNullableWithAggregatesFilter;
 
-    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    tfaSecret?: StringNullableWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  entityStatus?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    entityStatus?: StringWithAggregatesFilter;
+  @Field(() => StringWithAggregatesFilter, { nullable: true })
+  password?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    password?: StringWithAggregatesFilter;
+  @Field(() => DateTimeWithAggregatesFilter, { nullable: true })
+  createdAt?: DateTimeWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    createdAt?: DateTimeWithAggregatesFilter;
-
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    updatedAt?: DateTimeWithAggregatesFilter;
+  @Field(() => DateTimeWithAggregatesFilter, { nullable: true })
+  updatedAt?: DateTimeWithAggregatesFilter;
 }

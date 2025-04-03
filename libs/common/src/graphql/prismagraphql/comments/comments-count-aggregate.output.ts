@@ -4,28 +4,27 @@ import { Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class CommentsCountAggregate {
+  @Field(() => Int, { nullable: false })
+  id!: number;
 
-    @Field(() => Int, {nullable:false})
-    id!: number;
+  @Field(() => Int, { nullable: false })
+  content!: number;
 
-    @Field(() => Int, {nullable:false})
-    content!: number;
+  @Field(() => Int, { nullable: false })
+  entityStatus!: number;
 
-    @Field(() => Int, {nullable:false})
-    entityStatus!: number;
+  @Field(() => Int, { nullable: false })
+  createdAt!: number;
 
-    @Field(() => Int, {nullable:false})
-    createdAt!: number;
+  @Field(() => Int, { nullable: false })
+  updatedAt!: number;
 
-    @Field(() => Int, {nullable:false})
-    updatedAt!: number;
+  @Field(() => Int, { nullable: false })
+  usersId!: number;
 
-    @Field(() => Int, {nullable:false})
-    usersId!: number;
+  @Field(() => Int, { nullable: false })
+  postsId!: number;
 
-    @Field(() => Int, {nullable:false})
-    postsId!: number;
-
-    @Field(() => Int, {nullable:false})
-    _all!: number;
+  @Field(() => Int, { nullable: false })
+  _all!: number;
 }

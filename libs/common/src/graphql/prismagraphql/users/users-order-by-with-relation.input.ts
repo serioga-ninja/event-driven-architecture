@@ -7,43 +7,42 @@ import { CommentsOrderByRelationAggregateInput } from '../comments/comments-orde
 
 @InputType()
 export class UsersOrderByWithRelationInput {
+  @Field(() => SortOrder, { nullable: true })
+  id?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    id?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  email?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    email?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  phone?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    phone?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  firstName?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    firstName?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  lastName?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    lastName?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  isTfaEnabled?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    isTfaEnabled?: `${SortOrder}`;
+  @Field(() => SortOrderInput, { nullable: true })
+  tfaSecret?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    tfaSecret?: SortOrderInput;
+  @Field(() => SortOrder, { nullable: true })
+  entityStatus?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    entityStatus?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  password?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    password?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  createdAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    createdAt?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  updatedAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    updatedAt?: `${SortOrder}`;
+  @Field(() => PostsOrderByRelationAggregateInput, { nullable: true })
+  Posts?: PostsOrderByRelationAggregateInput;
 
-    @Field(() => PostsOrderByRelationAggregateInput, {nullable:true})
-    Posts?: PostsOrderByRelationAggregateInput;
-
-    @Field(() => CommentsOrderByRelationAggregateInput, {nullable:true})
-    Comments?: CommentsOrderByRelationAggregateInput;
+  @Field(() => CommentsOrderByRelationAggregateInput, { nullable: true })
+  Comments?: CommentsOrderByRelationAggregateInput;
 }

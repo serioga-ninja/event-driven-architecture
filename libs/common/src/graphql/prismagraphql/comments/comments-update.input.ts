@@ -7,25 +7,28 @@ import { PostsUpdateOneRequiredWithoutCommentsNestedInput } from '../posts/posts
 
 @InputType()
 export class CommentsUpdateInput {
+  @Field(() => StringFieldUpdateOperationsInput, { nullable: true })
+  id?: StringFieldUpdateOperationsInput;
 
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    id?: StringFieldUpdateOperationsInput;
+  @Field(() => StringFieldUpdateOperationsInput, { nullable: true })
+  content?: StringFieldUpdateOperationsInput;
 
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    content?: StringFieldUpdateOperationsInput;
+  @Field(() => StringFieldUpdateOperationsInput, { nullable: true })
+  entityStatus?: StringFieldUpdateOperationsInput;
 
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    entityStatus?: StringFieldUpdateOperationsInput;
+  @Field(() => DateTimeFieldUpdateOperationsInput, { nullable: true })
+  createdAt?: DateTimeFieldUpdateOperationsInput;
 
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    createdAt?: DateTimeFieldUpdateOperationsInput;
+  @Field(() => DateTimeFieldUpdateOperationsInput, { nullable: true })
+  updatedAt?: DateTimeFieldUpdateOperationsInput;
 
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    updatedAt?: DateTimeFieldUpdateOperationsInput;
+  @Field(() => UsersUpdateOneRequiredWithoutCommentsNestedInput, {
+    nullable: true,
+  })
+  user?: UsersUpdateOneRequiredWithoutCommentsNestedInput;
 
-    @Field(() => UsersUpdateOneRequiredWithoutCommentsNestedInput, {nullable:true})
-    user?: UsersUpdateOneRequiredWithoutCommentsNestedInput;
-
-    @Field(() => PostsUpdateOneRequiredWithoutCommentsNestedInput, {nullable:true})
-    post?: PostsUpdateOneRequiredWithoutCommentsNestedInput;
+  @Field(() => PostsUpdateOneRequiredWithoutCommentsNestedInput, {
+    nullable: true,
+  })
+  post?: PostsUpdateOneRequiredWithoutCommentsNestedInput;
 }

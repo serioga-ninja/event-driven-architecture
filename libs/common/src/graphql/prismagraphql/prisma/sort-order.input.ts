@@ -5,10 +5,9 @@ import { NullsOrder } from './nulls-order.enum';
 
 @InputType()
 export class SortOrderInput {
+  @Field(() => SortOrder, { nullable: false })
+  sort!: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:false})
-    sort!: `${SortOrder}`;
-
-    @Field(() => NullsOrder, {nullable:true})
-    nulls?: `${NullsOrder}`;
+  @Field(() => NullsOrder, { nullable: true })
+  nulls?: `${NullsOrder}`;
 }

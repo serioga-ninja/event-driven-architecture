@@ -12,32 +12,31 @@ import { UsersMaxAggregateInput } from './users-max-aggregate.input';
 
 @ArgsType()
 export class UsersGroupByArgs {
+  @Field(() => UsersWhereInput, { nullable: true })
+  @Type(() => UsersWhereInput)
+  where?: UsersWhereInput;
 
-    @Field(() => UsersWhereInput, {nullable:true})
-    @Type(() => UsersWhereInput)
-    where?: UsersWhereInput;
+  @Field(() => [UsersOrderByWithAggregationInput], { nullable: true })
+  orderBy?: Array<UsersOrderByWithAggregationInput>;
 
-    @Field(() => [UsersOrderByWithAggregationInput], {nullable:true})
-    orderBy?: Array<UsersOrderByWithAggregationInput>;
+  @Field(() => [UsersScalarFieldEnum], { nullable: false })
+  by!: Array<`${UsersScalarFieldEnum}`>;
 
-    @Field(() => [UsersScalarFieldEnum], {nullable:false})
-    by!: Array<`${UsersScalarFieldEnum}`>;
+  @Field(() => UsersScalarWhereWithAggregatesInput, { nullable: true })
+  having?: UsersScalarWhereWithAggregatesInput;
 
-    @Field(() => UsersScalarWhereWithAggregatesInput, {nullable:true})
-    having?: UsersScalarWhereWithAggregatesInput;
+  @Field(() => Int, { nullable: true })
+  take?: number;
 
-    @Field(() => Int, {nullable:true})
-    take?: number;
+  @Field(() => Int, { nullable: true })
+  skip?: number;
 
-    @Field(() => Int, {nullable:true})
-    skip?: number;
+  @Field(() => UsersCountAggregateInput, { nullable: true })
+  _count?: UsersCountAggregateInput;
 
-    @Field(() => UsersCountAggregateInput, {nullable:true})
-    _count?: UsersCountAggregateInput;
+  @Field(() => UsersMinAggregateInput, { nullable: true })
+  _min?: UsersMinAggregateInput;
 
-    @Field(() => UsersMinAggregateInput, {nullable:true})
-    _min?: UsersMinAggregateInput;
-
-    @Field(() => UsersMaxAggregateInput, {nullable:true})
-    _max?: UsersMaxAggregateInput;
+  @Field(() => UsersMaxAggregateInput, { nullable: true })
+  _max?: UsersMaxAggregateInput;
 }

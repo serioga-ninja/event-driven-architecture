@@ -7,31 +7,30 @@ import { CommentsOrderByRelationAggregateInput } from '../comments/comments-orde
 
 @InputType()
 export class PostsOrderByWithRelationInput {
+  @Field(() => SortOrder, { nullable: true })
+  id?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    id?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  content?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    content?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  visibility?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    visibility?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  entityStatus?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    entityStatus?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  createdAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    createdAt?: `${SortOrder}`;
+  @Field(() => SortOrder, { nullable: true })
+  updatedAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
-    updatedAt?: `${SortOrder}`;
+  @Field(() => SortOrderInput, { nullable: true })
+  usersId?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    usersId?: SortOrderInput;
+  @Field(() => UsersOrderByWithRelationInput, { nullable: true })
+  user?: UsersOrderByWithRelationInput;
 
-    @Field(() => UsersOrderByWithRelationInput, {nullable:true})
-    user?: UsersOrderByWithRelationInput;
-
-    @Field(() => CommentsOrderByRelationAggregateInput, {nullable:true})
-    Comments?: CommentsOrderByRelationAggregateInput;
+  @Field(() => CommentsOrderByRelationAggregateInput, { nullable: true })
+  Comments?: CommentsOrderByRelationAggregateInput;
 }

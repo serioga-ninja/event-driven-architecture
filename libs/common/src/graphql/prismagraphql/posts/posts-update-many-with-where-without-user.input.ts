@@ -6,12 +6,11 @@ import { PostsUpdateManyMutationInput } from './posts-update-many-mutation.input
 
 @InputType()
 export class PostsUpdateManyWithWhereWithoutUserInput {
+  @Field(() => PostsScalarWhereInput, { nullable: false })
+  @Type(() => PostsScalarWhereInput)
+  where!: PostsScalarWhereInput;
 
-    @Field(() => PostsScalarWhereInput, {nullable:false})
-    @Type(() => PostsScalarWhereInput)
-    where!: PostsScalarWhereInput;
-
-    @Field(() => PostsUpdateManyMutationInput, {nullable:false})
-    @Type(() => PostsUpdateManyMutationInput)
-    data!: PostsUpdateManyMutationInput;
+  @Field(() => PostsUpdateManyMutationInput, { nullable: false })
+  @Type(() => PostsUpdateManyMutationInput)
+  data!: PostsUpdateManyMutationInput;
 }
