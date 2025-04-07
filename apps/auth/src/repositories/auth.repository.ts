@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import UsersRepository from '../../../app/src/users/repositories/users.repository';
+import UsersRepository from '../../../profile/src/users/repositories/users.repository';
 
 @Injectable()
 export default class AuthRepository extends UsersRepository {}

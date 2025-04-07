@@ -87,7 +87,7 @@ export default class SecurityService {
     const secret = authenticator.generateSecret();
     const uri = authenticator.keyuri(
       email,
-      this._configService.getOrThrow('APP_SECRET'),
+      this._configService.getOrThrow('TWO_FA_SECRET'),
       secret,
     );
 

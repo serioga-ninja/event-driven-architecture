@@ -3,6 +3,40 @@
 
 services:
 
+  profile:
+    build:
+      context: .
+      dockerfile: apps/profile/Dockerfile
+      target: development
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
+    command: npm run start:debug profile
+    env_file:
+      - apps/profile/.env.docker
+    depends_on:
+      - postgres   # Changed from db to postgres
+      - redis
+      - rabbitmq
+      - kafka
+      - zookeeper
+      - auth
+    volumes:
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    ports:
+      - 3000:3000
+      - 9232:9232  # Expose debug port
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /user/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
   auth:
     build:
       context: .
@@ -10,7 +44,7 @@ services:
       target: development
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
-    command: npm run start:auth:debug
+    command: npm run start:debug auth
     env_file:
       - ./apps/auth/.env.docker
     depends_on:

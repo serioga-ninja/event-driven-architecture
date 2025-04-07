@@ -1,6 +1,6 @@
 import type { CacheConfig, MessageBrokerConfig, NODE_ENV } from '@app/common';
 import type { FastifyRequest } from 'fastify';
-import type { Users } from '../../../app/src/users/mongo-schemas';
+import type { Users } from '../../../profile/src/users/mongo-schemas';
 
 export type LoginRequest = FastifyRequest & { user: ValidateUserReturn };
 export type AuthConfigs = {

@@ -2,8 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/users"
+    "outDir": "../../dist/apps/profile"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../../types/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

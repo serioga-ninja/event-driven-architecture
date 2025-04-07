@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthModuleConfig } from './types';
 import JwtAuthGuard from '@app/common/auth/jwt-auth.guard';
 import { AUTH_QUEUE, AUTH_SERVICE, GRPC_AUTH_SERVICE } from '../message-broker';
+import * as process from 'node:process';
 
 @Module({
   imports: [
@@ -18,7 +19,10 @@ import { AUTH_QUEUE, AUTH_SERVICE, GRPC_AUTH_SERVICE } from '../message-broker';
           options: {
             url: configService.getOrThrow('AUTH_SERVER_URI'),
             package: 'auth',
-            protoPath: join(__dirname, 'proto/auth.proto'),
+            protoPath: join(
+              process.cwd(),
+              'libs/common/src/auth/proto/auth.proto',
+            ),
           },
         }),
         inject: [ConfigService],
