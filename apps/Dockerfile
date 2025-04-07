@@ -14,7 +14,7 @@ RUN npm ci
 COPY . .
 
 # Build the application
-RUN npm run build auth
+RUN npm run build ${APP_NAME}
 
 # Production stage
 FROM node:22-alpine AS production
@@ -38,16 +38,13 @@ RUN npm ci --only=production && \
     npx prisma generate
 
 # Copy built application from the development stage (fixed from builder to development)
-COPY --from=development /usr/src/app/dist/apps/auth ./dist/apps/auth
+COPY --from=development /usr/src/app/dist/apps/${APP_NAME} ./dist/apps/${APP_NAME}
 
 # Change to non-root user for security
 USER appuser
-
-# Expose port (optional, better to use docker-compose for port mapping)
-EXPOSE 3001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
   CMD node -e "process.exit(0)" || exit 1
 
-CMD ["node", "dist/apps/auth/main"]
+CMD ["node", "dist/apps/${APP_NAME}/main"]

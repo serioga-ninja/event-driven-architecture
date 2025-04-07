@@ -3,13 +3,51 @@
 
 services:
 
+  emails:
+    container_name: eda_emails
+    build:
+      context: .
+      dockerfile: apps/Dockerfile
+      target: development
+    environment:
+      - APP_NAME=emails
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
+    command: npm run start:debug emails
+    env_file:
+      - .env.docker
+      - apps/emails/.env.docker
+    depends_on:
+      - postgres   # Changed from db to postgres
+      - redis
+      - rabbitmq
+      - kafka
+      - zookeeper
+      - auth
+      - mongo
+    volumes:
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    ports:
+      - 9234:9231  # Expose debug port
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /user/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
   content:
     container_name: eda_content
     build:
       context: .
-      dockerfile: apps/content/Dockerfile
+      dockerfile: apps/Dockerfile
       target: development
     environment:
+      - APP_NAME=content
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
     command: npm run start:debug content
     env_file:
@@ -22,6 +60,7 @@ services:
       - kafka
       - zookeeper
       - auth
+      - mongo
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules
@@ -43,13 +82,14 @@ services:
     container_name: eda_profile
     build:
       context: .
-      dockerfile: apps/profile/Dockerfile
+      dockerfile: apps/Dockerfile
       target: development
     environment:
+      - APP_NAME=profile
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
     command: npm run start:debug profile
     env_file:
-      - .env
+      - .env.docker
       - apps/profile/.env.docker
     depends_on:
       - postgres   # Changed from db to postgres
@@ -58,6 +98,7 @@ services:
       - kafka
       - zookeeper
       - auth
+      - mongo
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules
@@ -79,13 +120,14 @@ services:
     container_name: eda_auth
     build:
       context: .
-      dockerfile: ./apps/auth/Dockerfile
+      dockerfile: ./apps/Dockerfile
       target: development
     environment:
+      - APP_NAME=auth
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
     command: npm run start:debug auth
     env_file:
-      - .env
+      - .env.docker
       - ./apps/auth/.env.docker
     depends_on:
       - postgres   # Changed from db to postgres
@@ -93,6 +135,7 @@ services:
       - rabbitmq
       - kafka
       - zookeeper
+      - mongo
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules

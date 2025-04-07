@@ -22,6 +22,7 @@ import { AuthSaga, AuthService, PasswordService } from './services';
 import AuthCacheService from './services/auth-cache.service';
 import { JwtStrategy, LocalStrategy } from './strategies';
 import AuthRepository from './repositories/auth.repository';
+import { env } from 'node:process';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import AuthRepository from './repositories/auth.repository';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: authConfigSchema,
-      envFilePath: './apps/auth/.env',
+      envFilePath: [`.env.${env.NODE_ENV}`, `./apps/auth/.env.${env.NODE_ENV}`],
     }),
     DatabaseModule,
     CommonModule,

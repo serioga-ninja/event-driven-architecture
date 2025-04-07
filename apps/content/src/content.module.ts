@@ -16,7 +16,7 @@ import { CommentsModule } from './comments/comments.module';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: contentConfigSchema,
-      envFilePath: './apps/content/.env',
+      envFilePath: ['.env', './apps/content/.env'],
     }),
     DatabaseModule,
     CommonModule,
