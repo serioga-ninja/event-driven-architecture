@@ -6,10 +6,10 @@ class PostsPaginatedFilter {
   @Field({ nullable: true })
   text: string;
 
-  @Field({ nullable: true })
+  @Field(() => VisibilityLevels, { nullable: true })
   visibility: VisibilityLevels;
 
-  @Field({ nullable: true })
+  @Field(() => EntityStatus, { nullable: true })
   entityStatus: EntityStatus;
 
   @Field({ nullable: true })

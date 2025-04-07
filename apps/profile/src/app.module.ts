@@ -11,7 +11,7 @@ import { DatabaseModule } from '@app/common';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: appConfigSchema,
-      envFilePath: './apps/profile/.env',
+      envFilePath: ['.env', './apps/profile/.env'],
     }),
     DatabaseModule,
     UsersModule,

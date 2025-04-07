@@ -3,7 +3,44 @@
 
 services:
 
+  content:
+    container_name: eda_content
+    build:
+      context: .
+      dockerfile: apps/content/Dockerfile
+      target: development
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
+    command: npm run start:debug content
+    env_file:
+      - .env.docker
+      - apps/content/.env.docker
+    depends_on:
+      - postgres   # Changed from db to postgres
+      - redis
+      - rabbitmq
+      - kafka
+      - zookeeper
+      - auth
+    volumes:
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    ports:
+      - 3002:3002
+      - 9233:9231  # Expose debug port
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /user/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
   profile:
+    container_name: eda_profile
     build:
       context: .
       dockerfile: apps/profile/Dockerfile
@@ -26,7 +63,7 @@ services:
       - /usr/src/app/dist
     ports:
       - 3000:3000
-      - 9232:9232  # Expose debug port
+      - 9232:9231  # Expose debug port
     develop:
       watch:
         - action: sync
@@ -38,6 +75,7 @@ services:
           path: package.json
 
   auth:
+    container_name: eda_auth
     build:
       context: .
       dockerfile: ./apps/auth/Dockerfile

@@ -3,7 +3,7 @@ import {
   DatabaseModule,
   EMAILS_QUEUE,
   EMAILS_SERVICE,
-  RmqModule,
+  MessageBrokerModule,
 } from '@app/common';
 import { Global, Module } from '@nestjs/common';
 import UsersController from './users.controller';
@@ -14,7 +14,7 @@ import { UsersRepository } from './repositories';
 @Module({
   imports: [
     DatabaseModule,
-    RmqModule.register({
+    MessageBrokerModule.register({
       name: EMAILS_SERVICE,
       queue: EMAILS_QUEUE,
     }),
