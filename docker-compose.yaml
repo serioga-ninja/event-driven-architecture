@@ -16,13 +16,20 @@ services:
       - .env.docker
       - apps/fallback/.env.docker
     depends_on:
-      - postgres   # Changed from db to postgres
-      - redis
-      - rabbitmq
-      - kafka
-      - zookeeper
-      - auth
-      - mongo
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      zookeeper:
+        condition: service_healthy
+      auth:
+        condition: service_started
+      mongo:
+        condition: service_healthy
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules
@@ -38,6 +45,13 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   emails:
     container_name: eda_emails
@@ -52,13 +66,20 @@ services:
       - .env.docker
       - apps/emails/.env.docker
     depends_on:
-      - postgres   # Changed from db to postgres
-      - redis
-      - rabbitmq
-      - kafka
-      - zookeeper
-      - auth
-      - mongo
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      zookeeper:
+        condition: service_healthy
+      auth:
+        condition: service_started
+      mongo:
+        condition: service_healthy
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules
@@ -74,6 +95,13 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   content:
     container_name: eda_content
@@ -88,13 +116,20 @@ services:
       - .env.docker
       - apps/content/.env.docker
     depends_on:
-      - postgres   # Changed from db to postgres
-      - redis
-      - rabbitmq
-      - kafka
-      - zookeeper
-      - auth
-      - mongo
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      zookeeper:
+        condition: service_healthy
+      auth:
+        condition: service_started
+      mongo:
+        condition: service_healthy
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules
@@ -111,6 +146,13 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   profile:
     container_name: eda_profile
@@ -125,13 +167,20 @@ services:
       - .env.docker
       - apps/profile/.env.docker
     depends_on:
-      - postgres   # Changed from db to postgres
-      - redis
-      - rabbitmq
-      - kafka
-      - zookeeper
-      - auth
-      - mongo
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      zookeeper:
+        condition: service_healthy
+      auth:
+        condition: service_started
+      mongo:
+        condition: service_healthy
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules
@@ -148,6 +197,13 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   auth:
     container_name: eda_auth
@@ -162,12 +218,18 @@ services:
       - .env.docker
       - ./apps/auth/.env.docker
     depends_on:
-      - postgres   # Changed from db to postgres
-      - redis
-      - rabbitmq
-      - kafka
-      - zookeeper
-      - mongo
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      zookeeper:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules
@@ -184,7 +246,13 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
-
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   postgres:    # Renamed from db to postgres
     image: postgres:16
@@ -202,29 +270,66 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   redis:
     image: redis:7
     container_name: eda_redis
     ports:
       - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   redisinsight:
     image: redis/redisinsight:latest
+    container_name: eda_redisinsight
     ports:
       - 5540:5540
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - eda_network
 
   rabbitmq:
     image: rabbitmq:management
+    container_name: eda_rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   mongo:
     image: mongo
+    container_name: eda_mongo
     restart: always
     environment:
       MONGO_INITDB_DATABASE: main
@@ -235,7 +340,17 @@ services:
       - ./.docker/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
       - 27017:27017
-
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/main --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   #region Kafka
 
@@ -250,12 +365,25 @@ services:
     volumes:
       - zookeeper_data:/var/lib/zookeeper/data
       - zookeeper_log:/var/lib/zookeeper/log
+    healthcheck:
+      test: echo stat | nc localhost 2181
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   kafka:
     image: confluentinc/cp-kafka:7.4.4
     container_name: eda_kafka
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
     ports:
       - "9092:9092"
       - "9094:9094"  # Adding external port for host access
@@ -272,6 +400,13 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     volumes:
       - kafka_data:/var/lib/kafka/data
+    restart: unless-stopped
+    networks:
+      - eda_network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -284,6 +419,9 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    restart: unless-stopped
+    networks:
+      - eda_network
 
   #endregion
 
@@ -294,3 +432,8 @@ volumes:
   zookeeper_data:
   zookeeper_log:
   kafka_data:
+
+networks:
+  eda_network:
+    driver: bridge
+
