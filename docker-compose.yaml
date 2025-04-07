@@ -3,6 +3,42 @@
 
 services:
 
+  fallback:
+    container_name: eda_fallback
+    build:
+      context: .
+      dockerfile: apps/Dockerfile
+      target: development
+    environment:
+      - APP_NAME=fallback
+    command: npm run start:debug fallback
+    env_file:
+      - .env.docker
+      - apps/fallback/.env.docker
+    depends_on:
+      - postgres   # Changed from db to postgres
+      - redis
+      - rabbitmq
+      - kafka
+      - zookeeper
+      - auth
+      - mongo
+    volumes:
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    ports:
+      - 9235:9231  # Expose debug port
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /user/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
   emails:
     container_name: eda_emails
     build:
@@ -11,7 +47,6 @@ services:
       target: development
     environment:
       - APP_NAME=emails
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
     command: npm run start:debug emails
     env_file:
       - .env.docker
@@ -48,7 +83,6 @@ services:
       target: development
     environment:
       - APP_NAME=content
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
     command: npm run start:debug content
     env_file:
       - .env.docker
@@ -86,7 +120,6 @@ services:
       target: development
     environment:
       - APP_NAME=profile
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
     command: npm run start:debug profile
     env_file:
       - .env.docker
@@ -124,7 +157,6 @@ services:
       target: development
     environment:
       - APP_NAME=auth
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/eda_db
     command: npm run start:debug auth
     env_file:
       - .env.docker
