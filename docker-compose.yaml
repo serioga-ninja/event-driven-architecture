@@ -45,7 +45,6 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -95,7 +94,6 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -146,7 +144,6 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -197,7 +194,6 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -246,7 +242,6 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -270,7 +265,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -288,7 +282,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -304,7 +297,6 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    restart: unless-stopped
     networks:
       - eda_network
 
@@ -319,7 +311,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -370,7 +361,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -400,7 +390,6 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     volumes:
       - kafka_data:/var/lib/kafka/data
-    restart: unless-stopped
     networks:
       - eda_network
     deploy:
@@ -419,7 +408,6 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-    restart: unless-stopped
     networks:
       - eda_network
 
